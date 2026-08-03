@@ -1,0 +1,501 @@
+---
+title: 'Data Preprocessing with RStudio and "tidyverse"'
+subtitle: "From experimental task data to descriptive summaries"
+author: 'Jens Roeser<br><span class="bluesky-account"><a href="https://bsky.app/profile/sentwrite.bsky.social">&#64;sentwrite.bsky.social</a></span><br>email: <a href="mailto:jens.roeser@ntu.ac.uk">jens.roeser@ntu.ac.uk</a>'
+date: ""
+output:
+  ioslides_presentation:
+    widescreen: true
+    incremental: false
+    css: slides.css
+    highlight: pygments
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  comment = NA
+)
+options(pillar.print_min = 5, pillar.print_max = 8)
+library(tidyverse)
+library(readxl)
+library(haven)
+```
+
+<script src="assets/code-highlight.js"></script>
+
+## Hello
+
+Jens Roeser
+
+- Nottingham Trent University
+- I work with experimental language data and reproducible R workflows
+- Contact: `jens.roeser@ntu.ac.uk`
+
+Today is a practical workshop: short explanations, live coding, then exercises.
+
+## Overview
+
+<div class="pipeline">
+  <div class="pipeline-box"><span class="panel-title">Project</span>Know where files live</div>
+  <div class="pipeline-arrow">&rarr;</div>
+  <div class="pipeline-box"><span class="panel-title">Read</span>CSV, Excel, SPSS</div>
+  <div class="pipeline-arrow">&rarr;</div>
+  <div class="pipeline-box"><span class="panel-title">Inspect</span>Check structure</div>
+  <div class="pipeline-arrow">&rarr;</div>
+  <div class="pipeline-box"><span class="panel-title">Process</span><span class="inline-code">select</span>, <span class="inline-code">filter</span>, <span class="inline-code">mutate</span></div>
+  <div class="pipeline-arrow">&rarr;</div>
+  <div class="pipeline-box"><span class="panel-title">Summarise</span>Use <span class="inline-code">.by</span></div>
+</div>
+
+Throughout, I will first introduce functions which we then practise in exercises.
+
+## RStudio Projects
+
+<p class="question">An RStudio Project is a folder-based workspace.</p>
+
+What it does:
+
+- marks the workshop folder as one self-contained project
+- opens RStudio in the correct working directory
+
+Why it matters:
+
+- paths start from the project folder
+- scripts, data, slides, and exercises stay together
+
+For this workshop, open the provided R project file.
+
+## Why Projects Matter
+
+With the project open, these paths work:
+
+```{r eval=FALSE}
+read_csv("workshop_module/data/chinese_ldt.csv")
+```
+
+Without the project open, R may look in the wrong folder.
+
+Check your current project folder:
+
+```{r eval=FALSE}
+getwd()
+```
+
+## Download The Workshop Folder
+
+Later, participants can download the workshop module from GitHub.
+
+```{r eval=FALSE}
+workshop_url <- "https://github.com/USERNAME/REPOSITORY/archive/refs/heads/main.zip"
+zip_file <- "lplus-2026-ws.zip"
+
+download.file(workshop_url, zip_file, mode = "wb")
+unzip(zip_file)
+
+file.rename(
+  "REPOSITORY-main/workshop_module",
+  "workshop_module"
+)
+```
+
+Then open `workshop_module/lplus-2026-ws.Rproj`.
+
+## Creating A Project
+
+For your own work later:
+
+- **File > New Project**
+- choose **New Directory** or **Existing Directory**
+- keep raw data in a `data/` folder
+- keep scripts in a `scripts/` or `exercises/` folder
+- open the `.Rproj` file before working
+
+Project paths should be relative:
+
+```{r eval=FALSE}
+read_csv("data/my_data.csv")
+```
+
+## Why Preprocess Data?
+
+Problem:
+
+- data rarely arrive in the shape needed for analysis
+
+Goal:
+
+- preprocessing turns raw data into analysable data
+
+Scripts make data processing reproducible and reduce manual spreadsheet edits.
+
+## The Tidyverse
+
+Collection of R packages that share:
+
+- common data structures
+- common function style
+- common assumptions about tidy data
+- tools designed to work together
+
+```{r eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+## Tidy Data
+
+```{r echo=FALSE, out.width="80%", fig.align="center"}
+knitr::include_graphics("assets/tidy_1.png")
+```
+
+- Each variable has its own column
+- Each observation has its own row
+- Each value has its own cell
+
+## One Shared Pattern
+
+<p class="question">Most tidyverse data processing functions follow one logic.</p>
+
+```{r eval=FALSE}
+verb(data, instructions)
+```
+
+Examples:
+
+```{r eval=FALSE}
+select(data, variable)
+filter(data, variable > 100)
+mutate(data, new_variable = old_variable * 2)
+summarise(data, mean_variable = mean(variable))
+```
+
+## Chinese Lexical Decision Task
+
+Participants saw stimulus images in Chinese or Latin script and decided whether each one was a real word.
+
+<table class="stimulus-table ldt-stimuli">
+  <tr>
+    <th>Script</th>
+    <th>Word</th>
+    <th>Nonword</th>
+  </tr>
+  <tr>
+    <td>Chinese</td>
+    <td><img src="assets/ldt/chinese_realword_cat.png" alt="Chinese real word stimulus"><span class="stim-label">cat / word</span></td>
+    <td><img src="assets/ldt/chinese_nonword_cat.png" alt="Chinese nonword stimulus"><span class="stim-label">cat / nonword</span></td>
+  </tr>
+  <tr>
+    <td>Latin</td>
+    <td><img src="assets/ldt/latin_realword_cat.png" alt="Latin real word stimulus"><span class="stim-label">cat / word</span></td>
+    <td><img src="assets/ldt/latin_nonword_cat.png" alt="Latin nonword stimulus"><span class="stim-label">cat / nonword</span></td>
+  </tr>
+</table>
+
+<p class="source-note">Each row in the dataset is one response trial from the online task export.</p>
+
+## More Variables
+
+The data also contain useful predictors and item information.
+
+Task variables:
+
+- `ppt_id`, `trial`, `stimulus`, `script`, `lexicality`
+- `word_eng`, `response`, `correct_response`
+
+Outcome variables:
+
+- `rt`, `rt_sec`, `correct`
+
+The data also include `device` and `browser` from the online task export.
+
+## Reading CSV Files
+
+```{r eval=FALSE}
+chinese_ldt_base <- read.csv("workshop_module/data/chinese_ldt.csv")
+class(chinese_ldt_base)
+# "data.frame"
+```
+
+Base R returns a data frame. `read_csv` returns a tibble.
+
+```{r eval=FALSE}
+chinese_ldt <- read_csv("workshop_module/data/chinese_ldt.csv")
+class(chinese_ldt)
+# "spec_tbl_df" "tbl_df" "tbl" "data.frame"
+```
+
+## Reading Excel Files
+
+```{r eval=FALSE}
+library(readxl)
+
+chinese_ldt_excel <- read_excel("workshop_module/data/chinese_ldt.xlsx")
+```
+
+Use this when collaborators send `.xlsx` files.
+
+## Reading SPSS Files
+
+```{r eval=FALSE}
+library(haven)
+
+chinese_ldt_spss <- read_sav("workshop_module/data/chinese_ldt.sav")
+```
+
+Use this when data come from SPSS.
+
+## RStudio Import Dataset
+
+For spreadsheet-style importing:
+
+- Use **Import Dataset**
+- Choose the file
+- Check the preview
+- Copy the generated code into your script
+
+The non-code route is useful for discovery, but the generated code should still end up in the script.
+
+## Inspect Before Changing
+
+```{r eval=FALSE}
+glimpse(chinese_ldt)
+names(chinese_ldt)
+count(chinese_ldt, lexicality)
+```
+
+Open `workshop_module/exercises/01_reading_inspecting.R`.
+
+## Store The Result
+
+Tidyverse functions return a new data frame.
+
+```{r eval=FALSE}
+select(chinese_ldt, ppt_id, stimulus, rt)
+```
+
+This shows the result, but does not save it.
+
+```{r eval=FALSE}
+chinese_ldt_small <- select(chinese_ldt, ppt_id, stimulus, rt)
+```
+
+This saves the result so the next line can use `chinese_ldt_small`.
+
+## Selecting Variables
+
+Keep only the variables you need.
+
+```{r eval=FALSE}
+select(chinese_ldt, ppt_id, stimulus, rt)
+```
+
+## Selecting Many Variables
+
+```{r eval=FALSE}
+select(chinese_ldt, ppt_id, stimulus, contains("response"))
+```
+
+## Dropping Variables
+
+Use `-` inside `select` to remove variables.
+
+```{r eval=FALSE}
+select(chinese_ldt, -device, -browser, -rt_sec)
+```
+
+## Filtering Rows
+
+Keep rows that match a condition.
+
+```{r eval=FALSE}
+filter(chinese_ldt, rt > 2000)
+```
+
+```{r eval=FALSE}
+filter(chinese_ldt, lexicality == "word")
+```
+
+## Filtering With Multiple Conditions
+
+```{r eval=FALSE}
+filter(chinese_ldt, rt > 2000, lexicality == "word")
+```
+
+```{r eval=FALSE}
+filter(chinese_ldt, lexicality %in% c("word", "nonword"))
+```
+
+## Missing Values
+
+Missing values are `NA`, not `"NA"`.
+
+```{r eval=FALSE}
+filter(chinese_ldt, is.na(rt))
+```
+
+```{r eval=FALSE}
+filter(chinese_ldt, !is.na(rt))
+```
+
+## Creating Variables
+
+`mutate` adds or changes columns.
+
+```{r eval=FALSE}
+mutate(
+  chinese_ldt,
+  rt_sec = rt / 1000
+)
+```
+
+## More Mutate Examples
+
+```{r eval=FALSE}
+mutate(
+  chinese_ldt,
+  correct = response == correct_response,
+  slow_trial = rt > mean(rt)
+)
+```
+
+Open `workshop_module/exercises/02_select_filter_mutate.R`.
+
+## Descriptive Summaries
+
+```{r eval=FALSE}
+summarise(
+  chinese_ldt,
+  mean_rt = mean(rt),
+  sd_rt = sd(rt),
+  accuracy = mean(correct),
+  n = n()
+)
+```
+
+## Summaries By Group
+
+Use `.by` for grouped summaries.
+
+```{r eval=FALSE}
+summarise(
+  chinese_ldt,
+  mean_rt = mean(rt),
+  sd_rt = sd(rt),
+  accuracy = mean(correct),
+  n = n(),
+  .by = lexicality
+)
+```
+
+## Two Grouping Variables
+
+```{r eval=FALSE}
+summarise(
+  chinese_ldt,
+  mean_rt = mean(rt),
+  accuracy = mean(correct),
+  n = n(),
+  .by = c(script, lexicality)
+)
+```
+
+Open `workshop_module/exercises/03_summarise_by.R`.
+
+## Integrated Exercise
+
+Build a short preprocessing workflow:
+
+1. Read with `read_csv`
+2. Inspect with `glimpse`
+3. Reduce with `select` and `filter`
+4. Create with `mutate`
+5. Summarise with `.by`
+
+Open `workshop_module/exercises/04_integrated_live_exercise.R`.
+
+## Optional Backup: Pivoting
+
+Pivoting changes data shape.
+
+```{r eval=FALSE}
+chinese_ldt_summary <- summarise(
+  chinese_ldt,
+  mean_rt = mean(rt),
+  accuracy = mean(correct),
+  n = n(),
+  .by = c(ppt_id, lexicality)
+)
+```
+
+## Optional Pivot Wider
+
+Create one row per participant, with separate columns for words and nonwords.
+
+```{r eval=FALSE}
+chinese_ldt_summary_wide <- pivot_wider(
+  chinese_ldt_summary,
+  names_from = lexicality,
+  values_from = c(mean_rt, accuracy, n)
+)
+```
+
+## Optional Pivot Longer
+
+```{r eval=FALSE}
+scores_long <- pivot_longer(
+  chinese_ldt_summary,
+  cols = c(mean_rt, accuracy),
+  names_to = "measure",
+  values_to = "value"
+)
+```
+
+Optional pivoting exercise: `workshop_module/exercises/05_optional_pivoting_backup.R`.
+
+## Recommended Reading
+
+<div class="reading-columns">
+<div>
+
+Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). *R for data science* (2nd ed.). O'Reilly Media. <https://r4ds.hadley.nz/>
+
+- [6 Workflow: scripts and projects](https://r4ds.hadley.nz/workflow-scripts.html)
+- [3 Data transformation](https://r4ds.hadley.nz/data-transform.html)
+- [5 Data tidying](https://r4ds.hadley.nz/data-tidy.html)
+- [7 Data import](https://r4ds.hadley.nz/data-import.html)
+- [20 Spreadsheets](https://r4ds.hadley.nz/spreadsheets.html)
+
+</div>
+<div>
+
+Andrews, M. (2021). *Doing data science in R: An introduction for social scientists*. SAGE. <https://www.mjandrews.org/book/ddsr/>
+
+- [2 Introduction to R](https://github.com/mark-andrews/ddsr/releases/download/v22.7.31/chapter_02_introduction.pdf)
+- [3 Data Wrangling](https://github.com/mark-andrews/ddsr/releases/download/v22.7.31/chapter_03_wrangling.pdf)
+- [7 Reproducible Data Analysis](https://github.com/mark-andrews/ddsr/releases/download/v22.7.31/chapter_07_reproducible.pdf)
+
+</div>
+</div>
+
+## Apply This Workflow To Your Own Data
+
+<div class="function-overview">
+
+| Function | Use it for |
+|---|---|
+| `read_csv` / `read_excel` / `read_sav` | read common file formats into R |
+| `glimpse` | inspect variable names and types before editing |
+| `select` | keep or drop variables to make data more manageable |
+| `filter` | remove errors, practice trials, or implausible responses |
+| `mutate` | create or change variables needed for analysis |
+| `summarise` + `.by` | turn trial-level data into grouped descriptive results |
+| `pivot_wider` / `pivot_longer` | reshape data frame orientation |
+
+</div>
+
+\ 
+
+A useful next step is pipe-based preprocessing workflows: `|>` or `%>%`

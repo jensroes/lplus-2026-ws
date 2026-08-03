@@ -1,0 +1,14 @@
+Day 5: Preprocessing and exploring data using R
+Instructor: Jens Roeser (jens.roeser@ntu.ac.uk)
+Content:
+type of data: any
+stage of project: preprocessing data for analysis
+focus:
+loading and reading data
+loading packages
+cleaning the data
+making subsets of the data (by selecting relevant columns/variables)
+working with simple datasets 
+possibility: build on the lexical decision task (accuracy data) discussed in the Psychopy session
+exploring data and getting descriptive statistics 
+

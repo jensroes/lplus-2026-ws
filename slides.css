@@ -1,0 +1,360 @@
+.title-slide {
+  background-image: url("assets/ntu4.jpg");
+  background-position: center;
+  background-size: cover;
+}
+
+.title-slide hgroup {
+  background: rgba(0, 0, 0, 0.56);
+  margin-left: -60px;
+  padding: 18px 60px 22px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.title-slide hgroup h1 {
+  color: white;
+  font-size: 50px;
+}
+
+.title-slide hgroup h2 {
+  color: white;
+  font-size: 28px;
+  line-height: 1.25;
+}
+
+.title-slide hgroup p {
+  color: white;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.25;
+  margin-top: 18px;
+}
+
+.bluesky-account {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.bluesky-account::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 57'%3E%3Cpath fill='%231185fe' d='M13.9 3.4C21.2 8.9 29 20 32 26c3-6 10.8-17.1 18.1-22.6C55.4-.5 64-3.5 64 6.1c0 1.9-1.1 16.1-1.7 18.4-2.2 8-10.4 10-17.6 8.8 12.6 2.1 15.8 9.2 8.9 16.3-13.1 13.5-18.8-3.4-20.3-7.8-.3-.8-.4-1.2-.5-.9-.1-.3-.2.1-.5.9-1.5 4.4-7.2 21.3-20.3 7.8-6.9-7.1-3.7-14.2 8.9-16.3-7.2 1.2-15.4-.8-17.6-8.8C2.6 22.2 1.5 8 1.5 6.1 0-3.5 8.6-.5 13.9 3.4Z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: "";
+  display: inline-block;
+  height: 1.1em;
+  width: 1.24em;
+}
+
+.bluesky-account a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.topic-label {
+  color: #0868ac;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.source-note {
+  color: #666666;
+  font-size: 15px;
+  margin-top: 12px;
+}
+
+.question {
+  color: #084081;
+  font-size: 31px;
+  line-height: 1.25;
+  margin-top: 1.25em;
+}
+
+.compact-question {
+  font-size: 27px;
+  margin-top: 0.8em;
+}
+
+.take-home {
+  background: #e7f1f8;
+  border-left: 8px solid #0868ac;
+  font-size: 25px;
+  margin-top: 1.25em;
+  padding: 14px 20px;
+}
+
+.large-list {
+  font-size: 25px;
+  line-height: 1.45;
+}
+
+.small {
+  font-size: 75%;
+}
+
+.two-col {
+  align-items: stretch;
+  box-sizing: border-box;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 18px;
+  max-width: 88%;
+}
+
+.plain-panel {
+  background: #f7fbff;
+  border: 2px solid #0868ac;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 22px;
+  line-height: 1.3;
+  padding: 18px 20px;
+}
+
+.plain-panel strong,
+.plain-panel .panel-title {
+  color: #084081;
+  display: block;
+  font-size: 25px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.plain-panel p {
+  margin: 0;
+}
+
+.pipeline {
+  align-items: stretch;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 28px;
+  margin-top: 22px;
+}
+
+.pipeline-box {
+  background: #f7fbff;
+  border: 2px solid #0868ac;
+  border-radius: 8px;
+  flex: 1;
+  font-size: 19px;
+  line-height: 1.25;
+  padding: 14px;
+  text-align: center;
+}
+
+.pipeline-box strong,
+.pipeline-box .panel-title {
+  color: #084081;
+  display: block;
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.inline-code {
+  background: #eef6fc;
+  border-radius: 4px;
+  color: #084081;
+  font-family: "Source Code Pro", "Menlo", "Consolas", monospace;
+  font-size: 0.88em;
+  padding: 1px 4px;
+}
+
+.pipeline-arrow {
+  align-self: center;
+  color: #0868ac;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.stimulus-table {
+  border-collapse: collapse;
+  font-size: 28px;
+  margin: 20px auto;
+  width: 88%;
+}
+
+.stimulus-table th,
+.stimulus-table td {
+  border-bottom: 1px solid #bdbdbd;
+  padding: 10px 18px;
+  text-align: left;
+}
+
+.stimulus-table th {
+  color: #084081;
+}
+
+.ldt-stimuli td {
+  vertical-align: middle;
+}
+
+.ldt-stimuli img {
+  display: block;
+  max-height: 84px;
+  max-width: 190px;
+}
+
+.stim-label {
+  color: #555555;
+  display: block;
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+.reading-columns {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  font-size: 21px;
+  line-height: 1.28;
+}
+
+.reading-columns ul {
+  margin-top: 8px;
+  padding-left: 20px;
+}
+
+.reading-columns li {
+  margin-bottom: 8px;
+}
+
+.function-overview table {
+  font-size: 22px;
+  line-height: 1.22 !important;
+  margin-top: 14px !important;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.function-overview th,
+.function-overview td {
+  line-height: 1.22 !important;
+  padding: 7px 9px !important;
+  vertical-align: top;
+}
+
+.function-overview tr {
+  height: auto !important;
+}
+
+.function-overview p {
+  line-height: 1.22 !important;
+  margin: 0 !important;
+}
+
+.function-overview th:nth-child(1),
+.function-overview td:nth-child(1) {
+  width: 34%;
+}
+
+.function-overview th:nth-child(2),
+.function-overview td:nth-child(2) {
+  width: 66%;
+}
+
+pre {
+  background: #f7fbff !important;
+  border: 1px solid #c7dceb !important;
+  border-left: 5px solid #2b8cbe !important;
+  border-radius: 4px;
+  box-shadow: none !important;
+  color: #263238;
+  font-size: 20px;
+  line-height: 1.28;
+  margin-left: 42px !important;
+  margin-right: auto !important;
+  padding: 10px 14px 10px 18px !important;
+  text-align: left;
+  width: calc(100% - 96px);
+}
+
+pre code {
+  background: transparent !important;
+  color: inherit;
+  font-size: inherit;
+}
+
+.prettyprint {
+  background: #f7fbff !important;
+  border: 1px solid #c7dceb !important;
+  border-left: 5px solid #2b8cbe !important;
+  border-radius: 4px;
+  margin-left: 42px !important;
+  margin-right: auto !important;
+  padding: 10px 14px 10px 18px !important;
+  text-align: left;
+  width: calc(100% - 96px);
+}
+
+.prettyprint .com,
+.sourceCode .co {
+  color: #5f6f7a;
+  font-style: italic;
+}
+
+.prettyprint .lit,
+.sourceCode .dv,
+.sourceCode .fl,
+.sourceCode .cn {
+  color: #9a3412;
+}
+
+.prettyprint .kwd,
+.sourceCode .cf,
+.sourceCode .kw,
+.sourceCode .ot {
+  color: #005cc5;
+  font-weight: 700;
+}
+
+.prettyprint .typ,
+.sourceCode .dt {
+  color: #6f42c1;
+}
+
+.prettyprint .str,
+.sourceCode .st,
+.sourceCode .sc {
+  color: #22863a;
+}
+
+.prettyprint .fun,
+.sourceCode .fu {
+  color: #005cc5;
+  font-weight: 700;
+}
+
+.r-function-call {
+  color: #005cc5 !important;
+  font-weight: 700;
+}
+
+.prettyprint .var,
+.sourceCode .va {
+  color: #24292e;
+}
+
+.prettyprint .pln,
+.sourceCode {
+  color: #263238;
+}
+
+.prettyprint .pun,
+.prettyprint .opn,
+.prettyprint .clo,
+.sourceCode .op {
+  color: #455a64;
+}
+
+slides > slide {
+  color: #222222;
+}
