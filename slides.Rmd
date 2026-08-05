@@ -26,12 +26,13 @@ library(haven)
 
 <script src="assets/code-highlight.js"></script>
 
-## Hello
+## Jens Roeser
 
-Jens Roeser
-
-- Nottingham Trent University
-- I work with experimental language data and reproducible R workflows
+- Associate Professor in Psycholinguistics, Nottingham Trent University
+- Research: language production, comprehension, and acquisition
+- Focus: written language production
+- Methods: R, Bayesian modelling, keystroke logging, eye tracking
+- Teaching: statistics and R, cognitive psychology, language acquisition
 - Contact: `jens.roeser@ntu.ac.uk`
 
 Today is a practical workshop: short explanations, live coding, then exercises.
@@ -50,7 +51,7 @@ Today is a practical workshop: short explanations, live coding, then exercises.
   <div class="pipeline-box"><span class="panel-title">Summarise</span>Use <span class="inline-code">.by</span></div>
 </div>
 
-Throughout, I will first introduce functions which we then practise in exercises.
+Throughout, I will first introduce functions which we then practice in exercises.
 
 ## RStudio Projects
 
