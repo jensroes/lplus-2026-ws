@@ -34,10 +34,8 @@ library(haven)
 - Research: language production, comprehension, and acquisition
 - Focus: written language production
 - Methods: R, Bayesian modelling, keystroke logging, eye tracking
-- Teaching: statistics and R, cognitive psychology, language acquisition
+- Teaching: (advanced) inferential statistics, R, data processing and visualisation / dashboards
 - Contact: `jens.roeser@ntu.ac.uk`
-
-Today is a practical workshop: short explanations, live coding, then exercises.
 
 ## Overview
 
@@ -476,7 +474,7 @@ Andrews, M. (2021). *Doing data science in R: An introduction for social scienti
 </div>
 </div>
 
-## Apply This Workflow To Your Own Data
+## Follow-Up Practice: A New Dataset
 
 <div class="function-overview">
 
@@ -491,10 +489,9 @@ Andrews, M. (2021). *Doing data science in R: An introduction for social scienti
 
 </div>
 
-\ 
-
-- A useful next step is pipe-based preprocessing workflows: `|>` or `%>%`
-- Reshaping data frame orientation using `pivot_wider` / `pivot_longer` 
+- Apply the same workflow to `data/blomkvist.csv`.
+- Follow-up script: `exercises/06_followup_blomkvist.R`.
+- A useful next step is pipe-based preprocessing workflows: `|>` or `%>%`.
 
 
 ## Tidy Data And Pivoting
@@ -523,7 +520,6 @@ chinese_ldt_summary <- summarise(
   chinese_ldt,
   mean_rt = mean(rt),
   accuracy = mean(correct),
-  n = n(),
   .by = c(ppt_id, lexicality)
 )
 ```
@@ -541,7 +537,7 @@ Create one row per participant, with separate columns for words and nonwords.
 chinese_ldt_summary_wide <- pivot_wider(
   chinese_ldt_summary,
   names_from = lexicality,
-  values_from = c(mean_rt, accuracy, n)
+  values_from = c(mean_rt, accuracy)
 )
 ```
 

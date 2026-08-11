@@ -7,12 +7,6 @@ library(tidyverse)
 
 chinese_ldt <- read_csv("data/chinese_ldt.csv")
 
-# Note on the other example dataset used while preparing these materials:
-# Blomkvist et al. (2017) contains reaction-time and participant-background data:
-# "Reference data on reaction time and aging using the
-# Nintendo Wii Balance Board: A cross-sectional study of 354 subjects from 20 to
-# 99 years of age", PLoS ONE, 12(12), e0189598.
-
 # 1. Create a participant-by-lexicality summary.
 chinese_ldt_summary <- summarise(
   chinese_ldt,
