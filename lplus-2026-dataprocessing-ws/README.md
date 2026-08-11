@@ -4,7 +4,7 @@ This folder contains the workshop materials.
 
 ## Start here
 
-1. Open `lplus-2026-ws.Rproj` in RStudio.
+1. Open `lplus-2026-dataprocessing-ws.Rproj` in RStudio.
 2. Open the scripts in `exercises/`.
 3. The example data are in `data/`.
 

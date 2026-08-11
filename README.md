@@ -4,22 +4,30 @@ Workshop materials for the data preprocessing with RStudio and tidyverse session
 
 ## Participant download
 
-Participants should use the `workshop_module/` folder.
+Participants need:
 
-That folder contains:
+- `slides.html`
+- `lplus-2026-dataprocessing-ws/`
 
-- `lplus-2026-ws.Rproj`
+They can download both by running this in R:
+
+```r
+source(url("https://raw.githubusercontent.com/jensroes/lplus-2026-ws/main/download_workshop.R"))
+```
+
+The workshop folder contains:
+
+- `lplus-2026-dataprocessing-ws.Rproj`
 - `data/`
 - `exercises/`
 - `README.md`
 
 ## Repository structure
 
-- `workshop_module/`: self-contained participant-facing workshop folder
-- `slides.Rmd`: working copy of the slide source
-- `workshop_module/exercises/`: exercise scripts
-- `workshop_module/data/`: active example data
-- `assets/`: working copy of slide assets
-- `zzz/`: archived old materials and data kept for reference
-- `workshop_outline.md`: planning outline
-- `workshop_submission.md`: conference/session submission text
+- `lplus-2026-dataprocessing-ws/`: self-contained participant-facing workshop folder
+- `slides.html`: rendered workshop slides
+- `slides.Rmd`: working copy of the slide source, used to render `slides.html`
+- `slides.css` and `assets/`: slide styling and assets
+- `lplus-2026-dataprocessing-ws/exercises/`: exercise scripts
+- `lplus-2026-dataprocessing-ws/data/`: active example data
+- `zzz/`: archived old materials and internal notes kept locally, ignored by Git

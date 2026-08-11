@@ -14,10 +14,12 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
+  eval = TRUE,
   warning = FALSE,
   message = FALSE,
   comment = NA
 )
+knitr::opts_knit$set(root.dir = normalizePath("lplus-2026-dataprocessing-ws"))
 options(pillar.print_min = 5, pillar.print_max = 8)
 library(tidyverse)
 library(readxl)
@@ -73,36 +75,38 @@ For this workshop, open the provided R project file.
 
 With the project open, these paths work:
 
-```{r eval=FALSE}
-read_csv("workshop_module/data/chinese_ldt.csv")
+```{r eval = F}
+read_csv("data/chinese_ldt.csv")
 ```
 
 Without the project open, R may look in the wrong folder.
 
 Check your current project folder:
 
-```{r eval=FALSE}
+```{r eval=F}
 getwd()
 ```
 
-## Download The Workshop Folder
-
-Later, participants can download the workshop module from GitHub.
+Example:
 
 ```{r eval=FALSE}
-workshop_url <- "https://github.com/USERNAME/REPOSITORY/archive/refs/heads/main.zip"
-zip_file <- "lplus-2026-ws.zip"
-
-download.file(workshop_url, zip_file, mode = "wb")
-unzip(zip_file)
-
-file.rename(
-  "REPOSITORY-main/workshop_module",
-  "workshop_module"
-)
+"/home/jensroes/lplus-2026-dataprocessing-ws"
 ```
 
-Then open `workshop_module/lplus-2026-ws.Rproj`.
+## Download The Workshop Folder From GitHub
+
+Run one line in R:
+
+```{r eval=FALSE}
+source(url("https://raw.githubusercontent.com/jensroes/lplus-2026-ws/main/download_workshop.R"))
+```
+
+This creates:
+
+- `slides.html`
+- `lplus-2026-dataprocessing-ws/`
+
+Then open `lplus-2026-dataprocessing-ws/lplus-2026-dataprocessing-ws.Rproj`.
 
 ## Creating A Project
 
@@ -132,29 +136,49 @@ Goal:
 
 Scripts make data processing reproducible and reduce manual spreadsheet edits.
 
-## The Tidyverse
-
-Collection of R packages that share:
-
-- common data structures
-- common function style
-- common assumptions about tidy data
-- tools designed to work together
+## Installing And Loading Packages
 
 ```{r eval=FALSE}
-install.packages("tidyverse")
+install.packages(c("tidyverse", "readxl", "haven"))
+```
+
+Install packages once.
+
+```{r eval=FALSE}
 library(tidyverse)
+library(readxl)
+library(haven)
 ```
 
-## Tidy Data
+Load packages in every new R session where you want to use them.
 
-```{r echo=FALSE, out.width="80%", fig.align="center"}
-knitr::include_graphics("assets/tidy_1.png")
-```
+## What Is The Tidyverse?
 
-- Each variable has its own column
-- Each observation has its own row
-- Each value has its own cell
+The tidyverse is a collection of R packages for working with data.
+
+- `readr` reads rectangular data files
+- `readxl` reads Excel files
+- `dplyr` transforms and summarises data
+- `tidyr` changes data shape
+- `ggplot2` makes plots
+
+The packages share a common style: data first, instructions second.
+
+## Tidyverse And Base R
+
+<div class="comparison-table">
+
+| Goal | Base R | Tidyverse |
+|---|---|---|
+| read CSV data | `read.csv("file.csv")` | `read_csv("file.csv")` |
+| select variables | `data[, c("ppt_id", "rt")]` | `select(data, ppt_id, rt)` |
+| filter rows | `data[data$rt > 2000, ]` | `filter(data, rt > 2000)` |
+| create a variable | `data$rt_sec <- data$rt / 1000` | `mutate(data, rt_sec = rt / 1000)` |
+| summarise | `mean(data$rt)` | `summarise(data, mean_rt = mean(rt))` |
+
+</div>
+
+The tidyverse versions use consistent function names and avoid repeatedly typing the data frame name inside each instruction.
 
 ## One Shared Pattern
 
@@ -214,26 +238,26 @@ The data also include `device` and `browser` from the online task export.
 
 ## Reading CSV Files
 
-```{r eval=FALSE}
-chinese_ldt_base <- read.csv("workshop_module/data/chinese_ldt.csv")
+```{r}
+chinese_ldt_base <- read.csv("data/chinese_ldt.csv")
 class(chinese_ldt_base)
 # "data.frame"
 ```
 
 Base R returns a data frame. `read_csv` returns a tibble.
 
-```{r eval=FALSE}
-chinese_ldt <- read_csv("workshop_module/data/chinese_ldt.csv")
+```{r}
+chinese_ldt <- read_csv("data/chinese_ldt.csv")
 class(chinese_ldt)
 # "spec_tbl_df" "tbl_df" "tbl" "data.frame"
 ```
 
 ## Reading Excel Files
 
-```{r eval=FALSE}
+```{r}
 library(readxl)
 
-chinese_ldt_excel <- read_excel("workshop_module/data/chinese_ldt.xlsx")
+chinese_ldt_excel <- read_excel("data/chinese_ldt.xlsx")
 ```
 
 Use this when collaborators send `.xlsx` files.
@@ -243,7 +267,7 @@ Use this when collaborators send `.xlsx` files.
 ```{r eval=FALSE}
 library(haven)
 
-chinese_ldt_spss <- read_sav("workshop_module/data/chinese_ldt.sav")
+chinese_ldt_spss <- read_sav("data/chinese_ldt.sav")
 ```
 
 Use this when data come from SPSS.
@@ -267,7 +291,7 @@ names(chinese_ldt)
 count(chinese_ldt, lexicality)
 ```
 
-Open `workshop_module/exercises/01_reading_inspecting.R`.
+Open `exercises/01_reading_inspecting.R`.
 
 ## Store The Result
 
@@ -289,13 +313,13 @@ This saves the result so the next line can use `chinese_ldt_small`.
 
 Keep only the variables you need.
 
-```{r eval=FALSE}
+```{r}
 select(chinese_ldt, ppt_id, stimulus, rt)
 ```
 
 ## Selecting Many Variables
 
-```{r eval=FALSE}
+```{r}
 select(chinese_ldt, ppt_id, stimulus, contains("response"))
 ```
 
@@ -303,7 +327,7 @@ select(chinese_ldt, ppt_id, stimulus, contains("response"))
 
 Use `-` inside `select` to remove variables.
 
-```{r eval=FALSE}
+```{r}
 select(chinese_ldt, -device, -browser, -rt_sec)
 ```
 
@@ -334,12 +358,20 @@ filter(chinese_ldt, lexicality %in% c("word", "nonword"))
 Missing values are `NA`, not `"NA"`.
 
 ```{r eval=FALSE}
-filter(chinese_ldt, is.na(rt))
+filter(chinese_ldt, is.na(rt)) # find missing values
 ```
 
 ```{r eval=FALSE}
-filter(chinese_ldt, !is.na(rt))
+filter(chinese_ldt, !is.na(rt)) # remove missing values
 ```
+
+or
+
+```{r eval = FALSE}
+drop_na(chinese_ldt, rt)
+```
+
+
 
 ## Creating Variables
 
@@ -362,11 +394,11 @@ mutate(
 )
 ```
 
-Open `workshop_module/exercises/02_select_filter_mutate.R`.
+Open `exercises/02_select_filter_mutate.R`.
 
 ## Descriptive Summaries
 
-```{r eval=FALSE}
+```{r}
 summarise(
   chinese_ldt,
   mean_rt = mean(rt),
@@ -380,7 +412,7 @@ summarise(
 
 Use `.by` for grouped summaries.
 
-```{r eval=FALSE}
+```{r}
 summarise(
   chinese_ldt,
   mean_rt = mean(rt),
@@ -393,7 +425,7 @@ summarise(
 
 ## Two Grouping Variables
 
-```{r eval=FALSE}
+```{r}
 summarise(
   chinese_ldt,
   mean_rt = mean(rt),
@@ -403,7 +435,7 @@ summarise(
 )
 ```
 
-Open `workshop_module/exercises/03_summarise_by.R`.
+Open `exercises/03_summarise_by.R`.
 
 ## Integrated Exercise
 
@@ -415,46 +447,7 @@ Build a short preprocessing workflow:
 4. Create with `mutate`
 5. Summarise with `.by`
 
-Open `workshop_module/exercises/04_integrated_live_exercise.R`.
-
-## Optional Backup: Pivoting
-
-Pivoting changes data shape.
-
-```{r eval=FALSE}
-chinese_ldt_summary <- summarise(
-  chinese_ldt,
-  mean_rt = mean(rt),
-  accuracy = mean(correct),
-  n = n(),
-  .by = c(ppt_id, lexicality)
-)
-```
-
-## Optional Pivot Wider
-
-Create one row per participant, with separate columns for words and nonwords.
-
-```{r eval=FALSE}
-chinese_ldt_summary_wide <- pivot_wider(
-  chinese_ldt_summary,
-  names_from = lexicality,
-  values_from = c(mean_rt, accuracy, n)
-)
-```
-
-## Optional Pivot Longer
-
-```{r eval=FALSE}
-scores_long <- pivot_longer(
-  chinese_ldt_summary,
-  cols = c(mean_rt, accuracy),
-  names_to = "measure",
-  values_to = "value"
-)
-```
-
-Optional pivoting exercise: `workshop_module/exercises/05_optional_pivoting_backup.R`.
+Open `exercises/04_integrated_live_exercise.R`.
 
 ## Recommended Reading
 
@@ -493,10 +486,78 @@ Andrews, M. (2021). *Doing data science in R: An introduction for social scienti
 | `filter` | remove errors, practice trials, or implausible responses |
 | `mutate` | create or change variables needed for analysis |
 | `summarise` + `.by` | turn trial-level data into grouped descriptive results |
-| `pivot_wider` / `pivot_longer` | reshape data frame orientation |
 
 </div>
 
 \ 
 
-A useful next step is pipe-based preprocessing workflows: `|>` or `%>%`
+- A useful next step is pipe-based preprocessing workflows: `|>` or `%>%`
+- Reshaping data frame orientation using `pivot_wider` / `pivot_longer` 
+
+
+## Tidy Data And Pivoting
+
+Messy summary:
+
+| ppt_id | word_rt | nonword_rt | word_acc | nonword_acc |
+|---|---:|---:|---:|---:|
+| 1 | 812 | 940 | 0.95 | 0.88 |
+
+Tidy summary:
+
+| ppt_id | lexicality | mean_rt | accuracy |
+|---|---|---:|---:|
+| 1 | word | 812 | 0.95 |
+| 1 | nonword | 940 | 0.88 |
+
+Tidy data makes the next verb easier to write.
+
+## Backup: Pivoting
+
+Pivoting changes data shape.
+
+```{r}
+chinese_ldt_summary <- summarise(
+  chinese_ldt,
+  mean_rt = mean(rt),
+  accuracy = mean(correct),
+  n = n(),
+  .by = c(ppt_id, lexicality)
+)
+```
+
+```{r echo = F}
+chinese_ldt_summary
+```
+
+
+## Pivot Wider 
+
+Create one row per participant, with separate columns for words and nonwords.
+
+```{r}
+chinese_ldt_summary_wide <- pivot_wider(
+  chinese_ldt_summary,
+  names_from = lexicality,
+  values_from = c(mean_rt, accuracy, n)
+)
+```
+
+```{r echo = F}
+chinese_ldt_summary_wide
+```
+
+
+## Pivot Longer
+
+```{r}
+pivot_longer(
+  chinese_ldt_summary,
+  cols = c(mean_rt, accuracy),
+  names_to = "measure",
+  values_to = "value"
+)
+```
+
+
+Pivoting exercise: `exercises/05_optional_pivoting_backup.R`.
