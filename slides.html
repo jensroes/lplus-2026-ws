@@ -3629,24 +3629,24 @@ An RStudio Project is a folder-based workspace.
 
 <pre class = 'prettyprint lang-r'>getwd()</pre>
 
-<pre >[1] &quot;/home/jensroes/workshop_module&quot;</pre>
+<p>Example:</p>
 
-</article></slide><slide class=""><hgroup><h2>Download The Workshop Folder</h2></hgroup><article  id="download-the-workshop-folder">
+<pre class = 'prettyprint lang-r'>&quot;/home/jensroes/lplus-2026-dataprocessing-ws&quot;</pre>
 
-<p>Later, participants can download the workshop module from GitHub.</p>
+</article></slide><slide class=""><hgroup><h2>Download The Workshop Folder From GitHub</h2></hgroup><article  id="download-the-workshop-folder-from-github">
 
-<pre class = 'prettyprint lang-r'>workshop_url &lt;- &quot;https://github.com/USERNAME/REPOSITORY/archive/refs/heads/main.zip&quot;
-zip_file &lt;- &quot;lplus-2026-ws.zip&quot;
+<p>Run one line in R:</p>
 
-download.file(workshop_url, zip_file, mode = &quot;wb&quot;)
-unzip(zip_file)
+<pre class = 'prettyprint lang-r'>source(url(&quot;https://raw.githubusercontent.com/jensroes/lplus-2026-ws/main/download_workshop.R&quot;))</pre>
 
-file.rename(
-  &quot;REPOSITORY-main/workshop_module&quot;,
-  &quot;workshop_module&quot;
-)</pre>
+<p>This creates:</p>
 
-<p>Then open <code>workshop_module/lplus-2026-ws.Rproj</code>.</p>
+<ul>
+<li><code>slides.html</code></li>
+<li><code>lplus-2026-dataprocessing-ws/</code></li>
+</ul>
+
+<p>Then open <code>lplus-2026-dataprocessing-ws/lplus-2026-dataprocessing-ws.Rproj</code>.</p>
 
 </article></slide><slide class=""><hgroup><h2>Creating A Project</h2></hgroup><article  id="creating-a-project">
 

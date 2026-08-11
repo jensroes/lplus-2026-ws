@@ -4,20 +4,20 @@ Workshop materials for the data preprocessing with RStudio and tidyverse session
 
 ## Participant download
 
-Participants need:
-
-- `slides.html`
-- `lplus-2026-dataprocessing-ws/`
+Participants need the `lplus-2026-dataprocessing-ws/` folder.
 
 They can download both by running this in R:
 
 ```r
-source(url("https://raw.githubusercontent.com/jensroes/lplus-2026-ws/main/download_workshop.R"))
+source(url("https://tinyurl.com/lplus-dataprocessing-ws"))
 ```
+
+This short link points to `download_workshop.R` in this repository.
 
 The workshop folder contains:
 
 - `lplus-2026-dataprocessing-ws.Rproj`
+- `slides.html`
 - `data/`
 - `exercises/`
 - `README.md`

@@ -55,6 +55,23 @@ Today is a practical workshop: short explanations, live coding, then exercises.
 
 Throughout, I will first introduce functions which we then practice in exercises.
 
+## Download The Workshop Folder From GitHub
+
+Run one line in R:
+
+```{r eval=FALSE}
+source(url("https://tinyurl.com/lplus-dataprocessing-ws"))
+```
+
+This creates:
+
+- `lplus-2026-dataprocessing-ws/`
+
+Then open:
+
+- `lplus-2026-dataprocessing-ws/slides.html`
+- `lplus-2026-dataprocessing-ws/lplus-2026-dataprocessing-ws.Rproj`
+
 ## RStudio Projects
 
 <p class="question">An RStudio Project is a folder-based workspace.</p>
@@ -92,21 +109,6 @@ Example:
 ```{r eval=FALSE}
 "/home/jensroes/lplus-2026-dataprocessing-ws"
 ```
-
-## Download The Workshop Folder From GitHub
-
-Run one line in R:
-
-```{r eval=FALSE}
-source(url("https://raw.githubusercontent.com/jensroes/lplus-2026-ws/main/download_workshop.R"))
-```
-
-This creates:
-
-- `slides.html`
-- `lplus-2026-dataprocessing-ws/`
-
-Then open `lplus-2026-dataprocessing-ws/lplus-2026-dataprocessing-ws.Rproj`.
 
 ## Creating A Project
 

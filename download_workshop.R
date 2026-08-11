@@ -18,18 +18,18 @@ unzip(zip_file, exdir = tmp_dir)
 
 repo_folder <- file.path(tmp_dir, "lplus-2026-ws-main")
 
-file.copy(
-  file.path(repo_folder, "slides.html"),
-  "slides.html",
-  overwrite = TRUE
-)
-
 file.rename(
   file.path(repo_folder, workshop_folder),
   workshop_folder
 )
 
+file.copy(
+  file.path(repo_folder, "slides.html"),
+  file.path(workshop_folder, "slides.html"),
+  overwrite = TRUE
+)
+
 unlink(tmp_dir, recursive = TRUE)
 
 message("Downloaded workshop materials.")
-message("Open slides.html and ", workshop_folder, "/", workshop_folder, ".Rproj")
+message("Open ", workshop_folder, "/slides.html and ", workshop_folder, "/", workshop_folder, ".Rproj")
