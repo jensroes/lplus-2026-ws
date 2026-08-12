@@ -33,6 +33,16 @@
   margin-top: 18px;
 }
 
+.title-slide hgroup a {
+  color: white;
+}
+
+.title-slides-link {
+  display: inline-block;
+  font-size: 0.82em;
+  margin-top: 10px;
+}
+
 /* Bluesky handle with a small embedded icon. Used on the title and intro slides. */
 .bluesky-account {
   align-items: center;

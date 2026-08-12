@@ -1,7 +1,7 @@
 ---
 title: 'Data Preprocessing with RStudio and "tidyverse"'
 subtitle: "From experimental task data to descriptive summaries"
-author: 'Jens Roeser<br><span class="bluesky-account"><a href="https://bsky.app/profile/sentwrite.bsky.social">&#64;sentwrite.bsky.social</a></span><br>email: <a href="mailto:jens.roeser@ntu.ac.uk">jens.roeser@ntu.ac.uk</a>'
+author: 'Jens Roeser<br><span class="bluesky-account"><a href="https://bsky.app/profile/sentwrite.bsky.social">&#64;sentwrite.bsky.social</a></span><br>email: <a href="mailto:jens.roeser@ntu.ac.uk">jens.roeser@ntu.ac.uk</a><br><span class="title-slides-link">Slides: <a href="https://rpubs.com/jensroes/lplus-2026-dataprocessing-ws">rpubs.com/jensroes/lplus-2026-dataprocessing-ws</a></span>'
 date: ""
 output:
   ioslides_presentation:
