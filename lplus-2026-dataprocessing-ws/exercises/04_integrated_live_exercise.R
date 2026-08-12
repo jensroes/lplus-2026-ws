@@ -15,7 +15,7 @@ glimpse(---)
 # 3. Drop the variables we do not need for this workflow.
 chinese_ldt_small <- select(
   chinese_ldt,
-  -device, -browser, -rt_sec
+  -word_eng, -rt_sec
 )
 
 # 4. Keep only rows with non-missing reaction time.

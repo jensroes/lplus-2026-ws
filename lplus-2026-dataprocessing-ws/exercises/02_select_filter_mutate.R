@@ -10,7 +10,7 @@ chinese_ldt <- read_csv("data/chinese_ldt.csv")
 # To use the changed data later, assign the result with <-.
 
 # 1. Drop the variables we do not need for the live exercises.
-chinese_ldt_small <- select(chinese_ldt, -device, -browser, -rt_sec)
+chinese_ldt_small <- select(chinese_ldt, -word_eng, -rt_sec)
 
 # Inspect the new data.
 glimpse(---)

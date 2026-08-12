@@ -320,6 +320,66 @@ pre code {
   width: calc(100% - 96px);
 }
 
+pre.r-output,
+pre.lang-r-output,
+slides > slide pre:not(.prettyprint) {
+  background: #f8fafc !important;
+  border: 1px solid #d1d5db !important;
+  border-left: 5px solid #9ca3af !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  color: #111827 !important;
+  font-family: "Menlo", "Consolas", "Liberation Mono", monospace;
+  font-feature-settings: "liga" 0, "calt" 0;
+  font-variant-ligatures: none;
+  font-size: 19px;
+  letter-spacing: 0.015em;
+  line-height: 1.5;
+  margin-left: 42px !important;
+  margin-right: auto !important;
+  max-height: 360px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 14px 10px 18px !important;
+  white-space: pre;
+  width: calc(100% - 96px);
+}
+
+pre.r-output *,
+pre.lang-r-output *,
+slides > slide pre:not(.prettyprint) * {
+  color: inherit !important;
+  font-style: normal !important;
+  font-weight: inherit !important;
+}
+
+pre.r-output .r-missing-value,
+pre.lang-r-output .r-missing-value,
+slides > slide pre:not(.prettyprint) .r-missing-value {
+  color: #b42318 !important;
+  font-style: normal !important;
+}
+
+pre.r-output .r-negative-number,
+pre.lang-r-output .r-negative-number,
+slides > slide pre:not(.prettyprint) .r-negative-number {
+  color: #b42318 !important;
+}
+
+pre.r-output .r-output-meta,
+pre.lang-r-output .r-output-meta,
+slides > slide pre:not(.prettyprint) .r-output-meta {
+  color: #6b7280 !important;
+  font-size: 0.88em;
+}
+
+pre.r-output .r-variable-type,
+pre.lang-r-output .r-variable-type,
+slides > slide pre:not(.prettyprint) .r-variable-type {
+  color: #6b7280 !important;
+  font-size: 0.88em;
+}
+
 .prettyprint .com,
 .sourceCode .co {
   color: #5f6f7a;

@@ -3467,6 +3467,58 @@ padding: 10px 14px 10px 18px !important;
 text-align: left;
 width: calc(100% - 96px);
 }
+pre.r-output,
+pre.lang-r-output,
+slides > slide pre:not(.prettyprint) {
+background: #f8fafc !important;
+border: 1px solid #d1d5db !important;
+border-left: 5px solid #9ca3af !important;
+border-radius: 4px !important;
+box-shadow: none !important;
+color: #111827 !important;
+font-family: "Menlo", "Consolas", "Liberation Mono", monospace;
+font-size: 19px;
+line-height: 1.5;
+margin-left: 42px !important;
+margin-right: auto !important;
+max-height: 360px;
+overflow-x: auto;
+overflow-y: hidden;
+padding: 10px 14px 10px 18px !important;
+white-space: pre;
+word-spacing: 0.16em;
+width: calc(100% - 96px);
+}
+pre.r-output *,
+pre.lang-r-output *,
+slides > slide pre:not(.prettyprint) * {
+color: inherit !important;
+font-style: normal !important;
+font-weight: inherit !important;
+}
+pre.r-output .r-missing-value,
+pre.lang-r-output .r-missing-value,
+slides > slide pre:not(.prettyprint) .r-missing-value {
+color: #b42318 !important;
+font-style: normal !important;
+}
+pre.r-output .r-negative-number,
+pre.lang-r-output .r-negative-number,
+slides > slide pre:not(.prettyprint) .r-negative-number {
+color: #b42318 !important;
+}
+pre.r-output .r-output-meta,
+pre.lang-r-output .r-output-meta,
+slides > slide pre:not(.prettyprint) .r-output-meta {
+color: #6b7280 !important;
+font-size: 0.88em;
+}
+pre.r-output .r-variable-type,
+pre.lang-r-output .r-variable-type,
+slides > slide pre:not(.prettyprint) .r-variable-type {
+color: #6b7280 !important;
+font-size: 0.88em;
+}
 .prettyprint .com,
 .sourceCode .co {
 color: #5f6f7a;
@@ -3546,11 +3598,9 @@ color: #222222;
 <li>Research: language production, comprehension, and acquisition</li>
 <li>Focus: written language production</li>
 <li>Methods: R, Bayesian modelling, keystroke logging, eye tracking</li>
-<li>Teaching: statistics and R, cognitive psychology, language acquisition</li>
+<li>Teaching: (advanced) inferential statistics, R, data processing and visualisation / dashboards</li>
 <li>Contact: <code>jens.roeser@ntu.ac.uk</code></li>
 </ul>
-
-<p>Today is a practical workshop: short explanations, live coding, then exercises.</p>
 
 </article></slide><slide class=""><hgroup><h2>Overview</h2></hgroup><article  id="overview">
 
@@ -3863,20 +3913,24 @@ Each row in the dataset is one response trial from the online task export.
 <li><code>word_eng</code>, <code>response</code>, <code>correct_response</code></li>
 </ul>
 
+<p>Participant variables:</p>
+
+<ul>
+<li><code>age</code>, <code>bilingual_status</code></li>
+</ul>
+
 <p>Outcome variables:</p>
 
 <ul>
 <li><code>rt</code>, <code>rt_sec</code>, <code>correct</code></li>
 </ul>
 
-<p>The data also include <code>device</code> and <code>browser</code> from the online task export.</p>
-
 </article></slide><slide class=""><hgroup><h2>Reading CSV Files</h2></hgroup><article  id="reading-csv-files">
 
 <pre class = 'prettyprint lang-r'>chinese_ldt_base &lt;- read.csv(&quot;data/chinese_ldt.csv&quot;)
 class(chinese_ldt_base)</pre>
 
-<pre >[1] &quot;data.frame&quot;</pre>
+<pre class = 'prettyprint lang-r-output'>[1] &quot;data.frame&quot;</pre>
 
 <pre class = 'prettyprint lang-r'># &quot;data.frame&quot;</pre>
 
@@ -3885,7 +3939,7 @@ class(chinese_ldt_base)</pre>
 <pre class = 'prettyprint lang-r'>chinese_ldt &lt;- read_csv(&quot;data/chinese_ldt.csv&quot;)
 class(chinese_ldt)</pre>
 
-<pre >[1] &quot;spec_tbl_df&quot; &quot;tbl_df&quot;      &quot;tbl&quot;         &quot;data.frame&quot; </pre>
+<pre class = 'prettyprint lang-r-output'>[1] &quot;spec_tbl_df&quot; &quot;tbl_df&quot;      &quot;tbl&quot;         &quot;data.frame&quot; </pre>
 
 <pre class = 'prettyprint lang-r'># &quot;spec_tbl_df&quot; &quot;tbl_df&quot; &quot;tbl&quot; &quot;data.frame&quot;</pre>
 
@@ -3944,54 +3998,75 @@ count(chinese_ldt, lexicality)</pre>
 
 <pre class = 'prettyprint lang-r'>select(chinese_ldt, ppt_id, stimulus, rt)</pre>
 
-<pre ># A tibble: 3,360 × 3
-  ppt_id stimulus                      rt
-   &lt;dbl&gt; &lt;chr&gt;                      &lt;dbl&gt;
-1      1 latin_realword_scoop.png    1420
-2      1 chinese_nonword_grass.png   2955
-3      1 chinese_realword_shave.png   817
-4      1 latin_realword_home.png     1571
-5      1 chinese_nonword_sand.png    1036
-# ℹ 3,355 more rows</pre>
+<pre class = 'prettyprint lang-r-output'># A tibble: 3,360 × 3
+  ppt_id stimulus                       rt
+   &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;
+1      1 latin_realword_scoop.png     1420
+2      1 chinese_nonword_grass.png    2955
+3      1 chinese_realword_shave.png    817
+4      1 latin_realword_home.png      1571
+5      1 chinese_nonword_sand.png     1036
+6      1 chinese_realword_change.png   903
+# ℹ 3,354 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Selecting Many Variables</h2></hgroup><article  id="selecting-many-variables">
 
 <pre class = 'prettyprint lang-r'>select(chinese_ldt, ppt_id, stimulus, contains(&quot;response&quot;))</pre>
 
-<pre ># A tibble: 3,360 × 4
-  ppt_id stimulus                   correct_response response
-   &lt;dbl&gt; &lt;chr&gt;                      &lt;chr&gt;            &lt;chr&gt;   
-1      1 latin_realword_scoop.png   word             word    
-2      1 chinese_nonword_grass.png  nonword          word    
-3      1 chinese_realword_shave.png word             word    
-4      1 latin_realword_home.png    word             word    
-5      1 chinese_nonword_sand.png   nonword          nonword 
-# ℹ 3,355 more rows</pre>
+<pre class = 'prettyprint lang-r-output'># A tibble: 3,360 × 4
+  ppt_id stimulus                    correct_response response
+   &lt;dbl&gt; &lt;chr&gt;                       &lt;chr&gt;            &lt;chr&gt;   
+1      1 latin_realword_scoop.png    word             word    
+2      1 chinese_nonword_grass.png   nonword          word    
+3      1 chinese_realword_shave.png  word             word    
+4      1 latin_realword_home.png     word             word    
+5      1 chinese_nonword_sand.png    nonword          nonword 
+6      1 chinese_realword_change.png word             word    
+# ℹ 3,354 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Dropping Variables</h2></hgroup><article  id="dropping-variables">
 
 <p>Use <code>-</code> inside <code>select</code> to remove variables.</p>
 
-<pre class = 'prettyprint lang-r'>select(chinese_ldt, -device, -browser, -rt_sec)</pre>
+<pre class = 'prettyprint lang-r'>select(chinese_ldt, -word_eng, -rt_sec)</pre>
 
-<pre ># A tibble: 3,360 × 10
-  ppt_id trial stimulus     script lexicality word_eng correct_response response
-   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;            &lt;chr&gt;   
-1      1     1 latin_realw… latin  word       scoop    word             word    
-2      1     2 chinese_non… chine… nonword    grass    nonword          word    
-3      1     3 chinese_rea… chine… word       shave    word             word    
-4      1     4 latin_realw… latin  word       home     word             word    
-5      1     5 chinese_non… chine… nonword    sand     nonword          nonword 
-# ℹ 3,355 more rows
-# ℹ 2 more variables: correct &lt;lgl&gt;, rt &lt;dbl&gt;</pre>
+<pre class = 'prettyprint lang-r-output'># A tibble: 3,360 × 11
+  ppt_id trial stimulus               script lexicality   age bilingual_status
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                  &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;           
+1      1     1 latin_realword_scoop.… latin  word          22 balanced        
+2      1     2 chinese_nonword_grass… chine… nonword       22 balanced        
+3      1     3 chinese_realword_shav… chine… word          22 balanced        
+4      1     4 latin_realword_home.p… latin  word          22 balanced        
+5      1     5 chinese_nonword_sand.… chine… nonword       22 balanced        
+6      1     6 chinese_realword_chan… chine… word          22 balanced        
+# ℹ 3,354 more rows
+# ℹ 4 more variables: correct_response &lt;chr&gt;, response &lt;chr&gt;, correct &lt;lgl&gt;,
+#   rt &lt;dbl&gt;</pre>
 
 </article></slide><slide class=""><hgroup><h2>Filtering Rows</h2></hgroup><article  id="filtering-rows">
 
 <p>Keep rows that match a condition.</p>
 
-<pre class = 'prettyprint lang-r'>filter(chinese_ldt, rt &gt; 2000)</pre>
-
 <pre class = 'prettyprint lang-r'>filter(chinese_ldt, lexicality == &quot;word&quot;)</pre>
+
+<pre class = 'prettyprint lang-r-output'># A tibble: 1,680 × 13
+  ppt_id trial stimulus      script lexicality word_eng   age bilingual_status
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;           
+1      1     1 latin_realwo… latin  word       scoop       22 balanced        
+2      1     3 chinese_real… chine… word       shave       22 balanced        
+3      1     4 latin_realwo… latin  word       home        22 balanced        
+4      1     6 chinese_real… chine… word       change      22 balanced        
+5      1     7 chinese_real… chine… word       bag         22 balanced        
+6      1     9 chinese_real… chine… word       peach       22 balanced        
+# ℹ 1,674 more rows
+# ℹ 5 more variables: correct_response &lt;chr&gt;, response &lt;chr&gt;, correct &lt;lgl&gt;,
+#   rt &lt;dbl&gt;, rt_sec &lt;dbl&gt;</pre>
+
+</article></slide><slide class=""><hgroup><h2>Filtering Rows</h2></hgroup><article  id="filtering-rows-1">
+
+<p>Keep rows that match a condition.</p>
+
+<pre class = 'prettyprint lang-r'>filter(chinese_ldt, rt &gt; 2000)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Filtering With Multiple Conditions</h2></hgroup><article  id="filtering-with-multiple-conditions">
 
@@ -4001,11 +4076,32 @@ count(chinese_ldt, lexicality)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Missing Values</h2></hgroup><article  id="missing-values">
 
+<p>Some other example data:</p>
+
+<pre class = 'prettyprint lang-r-output'># A tibble: 20,293 × 3
+     ID   Age Education     
+  &lt;int&gt; &lt;int&gt; &lt;fct&gt;         
+1 51624    34 High School   
+2 51625     4 &lt;NA&gt;          
+3 51626    16 &lt;NA&gt;          
+4 51627    10 &lt;NA&gt;          
+5 51628    60 High School   
+6 51629    26 9 - 11th Grade
+# ℹ 20,287 more rows</pre>
+
 <p>Missing values are <code>NA</code>, not <code>&quot;NA&quot;</code>.</p>
 
-<pre class = 'prettyprint lang-r'>filter(chinese_ldt, is.na(rt)) # find missing values</pre>
+</article></slide><slide class=""><hgroup><h2>Missing Values</h2></hgroup><article  id="missing-values-1">
 
-<pre class = 'prettyprint lang-r'>filter(chinese_ldt, !is.na(rt)) # remove missing values</pre>
+<pre class = 'prettyprint lang-r'>filter(chinese_ldt, is.na(rt)) # find missing rt values</pre>
+
+<pre class = 'prettyprint lang-r-output'># A tibble: 0 × 13
+# ℹ 13 variables: ppt_id &lt;dbl&gt;, trial &lt;dbl&gt;, stimulus &lt;chr&gt;, script &lt;chr&gt;,
+#   lexicality &lt;chr&gt;, word_eng &lt;chr&gt;, age &lt;dbl&gt;, bilingual_status &lt;chr&gt;,
+#   correct_response &lt;chr&gt;, response &lt;chr&gt;, correct &lt;lgl&gt;, rt &lt;dbl&gt;,
+#   rt_sec &lt;dbl&gt;</pre>
+
+<pre class = 'prettyprint lang-r'>filter(chinese_ldt, !is.na(rt)) # remove missing rt values</pre>
 
 <p>or</p>
 
@@ -4040,7 +4136,7 @@ count(chinese_ldt, lexicality)</pre>
   n = n()
 )</pre>
 
-<pre ># A tibble: 1 × 4
+<pre class = 'prettyprint lang-r-output'># A tibble: 1 × 4
   mean_rt sd_rt accuracy     n
     &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
 1   2399. 4980.    0.888  3360</pre>
@@ -4058,7 +4154,7 @@ count(chinese_ldt, lexicality)</pre>
   .by = lexicality
 )</pre>
 
-<pre ># A tibble: 2 × 5
+<pre class = 'prettyprint lang-r-output'># A tibble: 2 × 5
   lexicality mean_rt sd_rt accuracy     n
   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
 1 word         2301. 5047.    0.904  1680
@@ -4074,7 +4170,7 @@ count(chinese_ldt, lexicality)</pre>
   .by = c(script, lexicality)
 )</pre>
 
-<pre ># A tibble: 4 × 5
+<pre class = 'prettyprint lang-r-output'># A tibble: 4 × 5
   script  lexicality mean_rt accuracy     n
   &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
 1 latin   word         2223.    0.904   840
@@ -4220,7 +4316,7 @@ count(chinese_ldt, lexicality)</pre>
   .by = c(ppt_id, lexicality)
 )</pre>
 
-<pre ># A tibble: 168 × 4
+<pre class = 'prettyprint lang-r-output'># A tibble: 168 × 4
   ppt_id lexicality mean_rt accuracy
    &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;
 1      1 word         1167.     0.95
@@ -4228,7 +4324,8 @@ count(chinese_ldt, lexicality)</pre>
 3      2 nonword      1333.     0.85
 4      2 word         1582.     0.95
 5      3 word         1692.     0.8 
-# ℹ 163 more rows</pre>
+6      3 nonword      1429.     0.85
+# ℹ 162 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Pivot Wider</h2></hgroup><article  id="pivot-wider">
 
@@ -4240,7 +4337,7 @@ count(chinese_ldt, lexicality)</pre>
   values_from = c(mean_rt, accuracy)
 )</pre>
 
-<pre ># A tibble: 84 × 5
+<pre class = 'prettyprint lang-r-output'># A tibble: 84 × 5
   ppt_id mean_rt_word mean_rt_nonword accuracy_word accuracy_nonword
    &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;dbl&gt;
 1      1        1167.           1479.          0.95             0.95
@@ -4248,7 +4345,8 @@ count(chinese_ldt, lexicality)</pre>
 3      3        1692.           1429.          0.8              0.85
 4      4        1124.           2159.          0.95             0.7 
 5      5         728.           1299.          1                0.8 
-# ℹ 79 more rows</pre>
+6      6        1388.           1015.          1                0.95
+# ℹ 78 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Pivot Longer</h2></hgroup><article  id="pivot-longer">
 
@@ -4259,7 +4357,7 @@ count(chinese_ldt, lexicality)</pre>
   values_to = &quot;value&quot;
 )</pre>
 
-<pre ># A tibble: 336 × 4
+<pre class = 'prettyprint lang-r-output'># A tibble: 336 × 4
   ppt_id lexicality measure    value
    &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;dbl&gt;
 1      1 word       mean_rt  1167.  
@@ -4267,7 +4365,8 @@ count(chinese_ldt, lexicality)</pre>
 3      1 nonword    mean_rt  1479.  
 4      1 nonword    accuracy    0.95
 5      2 nonword    mean_rt  1333.  
-# ℹ 331 more rows</pre>
+6      2 nonword    accuracy    0.85
+# ℹ 330 more rows</pre>
 
 <p>Pivoting exercise: <code>exercises/05_optional_pivoting_backup.R</code>.</p></article></slide>
 

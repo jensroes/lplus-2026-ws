@@ -17,10 +17,11 @@ knitr::opts_chunk$set(
   eval = TRUE,
   warning = FALSE,
   message = FALSE,
-  comment = NA
+  comment = NA,
+  class.output = "r-output"
 )
 knitr::opts_knit$set(root.dir = normalizePath("lplus-2026-dataprocessing-ws"))
-options(pillar.print_min = 5, pillar.print_max = 8)
+options(width = 78, pillar.print_min = 6, pillar.print_max = 10)
 library(tidyverse)
 library(readxl)
 library(haven)
@@ -36,6 +37,20 @@ library(haven)
 - Methods: R, Bayesian modelling, keystroke logging, eye tracking
 - Teaching: (advanced) inferential statistics, R, data processing and visualisation / dashboards
 - Contact: `jens.roeser@ntu.ac.uk`
+- Social media: bsky.app/profile/sentwrite.bsky.social
+
+## Why Preprocess Data?
+
+Most time spent working with data is not spent running statistical tests.
+
+It is spent turning raw data into data that are:
+
+- understandable
+- trustworthy
+- analysis-ready
+- reproducible
+
+Data preprocessing is where we check that the data make sense, document research decisions, and create the variables and summaries that statistical analyses depend on.
 
 ## Overview
 
@@ -230,11 +245,13 @@ Task variables:
 - `ppt_id`, `trial`, `stimulus`, `script`, `lexicality`
 - `word_eng`, `response`, `correct_response`
 
+Participant variables:
+
+- `age`, `bilingual_status`
+
 Outcome variables:
 
 - `rt`, `rt_sec`, `correct`
-
-The data also include `device` and `browser` from the online task export.
 
 ## Reading CSV Files
 
@@ -328,7 +345,15 @@ select(chinese_ldt, ppt_id, stimulus, contains("response"))
 Use `-` inside `select` to remove variables.
 
 ```{r}
-select(chinese_ldt, -device, -browser, -rt_sec)
+select(chinese_ldt, -word_eng, -rt_sec)
+```
+
+## Filtering Rows
+
+Keep rows that match a condition.
+
+```{r eval=T}
+filter(chinese_ldt, lexicality == "word")
 ```
 
 ## Filtering Rows
@@ -339,9 +364,6 @@ Keep rows that match a condition.
 filter(chinese_ldt, rt > 2000)
 ```
 
-```{r eval=FALSE}
-filter(chinese_ldt, lexicality == "word")
-```
 
 ## Filtering With Multiple Conditions
 
@@ -355,14 +377,21 @@ filter(chinese_ldt, lexicality %in% c("word", "nonword"))
 
 ## Missing Values
 
+Some other example data:
+
+```{r echo = F}
+select(NHANES::NHANESraw, ID, Age, Education)
+```
 Missing values are `NA`, not `"NA"`.
 
-```{r eval=FALSE}
-filter(chinese_ldt, is.na(rt)) # find missing values
+## Missing Values
+
+```{r}
+filter(chinese_ldt, is.na(rt)) # find missing rt values
 ```
 
 ```{r eval=FALSE}
-filter(chinese_ldt, !is.na(rt)) # remove missing values
+filter(chinese_ldt, !is.na(rt)) # remove missing rt values
 ```
 
 or
