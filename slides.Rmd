@@ -31,26 +31,44 @@ library(haven)
 
 ## Jens Roeser
 
-- Associate Professor in Psycholinguistics, Nottingham Trent University
+<div class="intro-profile">
+<div>
+
+- Associate Professor in Psycholinguistics, Nottingham Institute of Psychology, Nottingham Trent University
 - Research: language production, comprehension, and acquisition
-- Focus: written language production
-- Methods: R, Bayesian modelling, keystroke logging, eye tracking
-- Teaching: (advanced) inferential statistics, R, data processing and visualisation / dashboards
+- Focus: real-time written language production
+- Methods: Bayesian modelling, keystroke logging, eye tracking
+- Teaching: (advanced) inferential statistics, data processing, data visualisation / dashboards
 - Contact: `jens.roeser@ntu.ac.uk`
-- Social media: bsky.app/profile/sentwrite.bsky.social
+- <span class="bluesky-account"><a href="https://bsky.app/profile/sentwrite.bsky.social">&#64;sentwrite.bsky.social</a></span>
+
+</div>
+<div class="intro-visuals">
+<div class="location-map-wrap" aria-label="World map showing Nottingham in the United Kingdom">
+<img class="location-map" src="assets/world-map-base.svg" alt="">
+<span class="map-arrow"></span>
+<span class="map-label">Nottingham, UK</span>
+<div class="uk-inset" aria-hidden="true">
+<img src="assets/world-map-base.svg" alt="">
+<span class="uk-dot"></span>
+</div>
+</div>
+</div>
+</div>
 
 ## Why Preprocess Data?
 
 Most time spent working with data is not spent running statistical tests.
 
-It is spent turning raw data into data that are:
+It is spent turning raw data into evidence we can trust.
 
-- understandable
-- trustworthy
-- analysis-ready
-- reproducible
+Preprocessing matters because it:
 
-Data preprocessing is where we check that the data make sense, document research decisions, and create the variables and summaries that statistical analyses depend on.
+- checks whether the data match what happened in the study
+- documents decisions about exclusions, recoding, and missing values
+- protects raw data from manual spreadsheet edits
+- makes the workflow reproducible with open-source tools
+- creates analysis-ready data for statistics, figures, and sharing
 
 ## Overview
 
@@ -59,11 +77,11 @@ Data preprocessing is where we check that the data make sense, document research
   <div class="pipeline-arrow">&rarr;</div>
   <div class="pipeline-box"><span class="panel-title">Read</span>CSV, Excel, SPSS</div>
   <div class="pipeline-arrow">&rarr;</div>
-  <div class="pipeline-box"><span class="panel-title">Inspect</span>Check structure</div>
+  <div class="pipeline-box"><span class="panel-title">Inspect</span>Check structure using e.g. <span class="inline-code">glimpse</span></div>
   <div class="pipeline-arrow">&rarr;</div>
   <div class="pipeline-box"><span class="panel-title">Process</span><span class="inline-code">select</span>, <span class="inline-code">filter</span>, <span class="inline-code">mutate</span></div>
   <div class="pipeline-arrow">&rarr;</div>
-  <div class="pipeline-box"><span class="panel-title">Summarise</span>Use <span class="inline-code">.by</span></div>
+  <div class="pipeline-box"><span class="panel-title">Summarise</span>Use <span class="inline-code">summarise</span> + <span class="inline-code">.by</span></div>
 </div>
 
 Throughout, I will first introduce functions which we then practice in exercises.
@@ -138,18 +156,6 @@ Project paths should be relative:
 ```{r eval=FALSE}
 read_csv("data/my_data.csv")
 ```
-
-## Why Preprocess Data?
-
-Problem:
-
-- data rarely arrive in the shape needed for analysis
-
-Goal:
-
-- preprocessing turns raw data into analysable data
-
-Scripts make data processing reproducible and reduce manual spreadsheet edits.
 
 ## Installing And Loading Packages
 
@@ -310,22 +316,6 @@ count(chinese_ldt, lexicality)
 
 Open `exercises/01_reading_inspecting.R`.
 
-## Store The Result
-
-Tidyverse functions return a new data frame.
-
-```{r eval=FALSE}
-select(chinese_ldt, ppt_id, stimulus, rt)
-```
-
-This shows the result, but does not save it.
-
-```{r eval=FALSE}
-chinese_ldt_small <- select(chinese_ldt, ppt_id, stimulus, rt)
-```
-
-This saves the result so the next line can use `chinese_ldt_small`.
-
 ## Selecting Variables
 
 Keep only the variables you need.
@@ -347,6 +337,23 @@ Use `-` inside `select` to remove variables.
 ```{r}
 select(chinese_ldt, -word_eng, -rt_sec)
 ```
+
+## Store The Result
+
+Tidyverse functions return a new data frame.
+
+```{r eval=FALSE}
+select(chinese_ldt, ppt_id, stimulus, rt)
+```
+
+This shows the result, but does not save it.
+
+```{r eval=FALSE}
+chinese_ldt_small <- select(chinese_ldt, ppt_id, stimulus, rt)
+```
+
+This saves the result so the next line can use `chinese_ldt_small`.
+
 
 ## Filtering Rows
 
@@ -527,28 +534,25 @@ Andrews, M. (2021). *Doing data science in R: An introduction for social scienti
 
 Messy summary:
 
-| ppt_id | word_rt | nonword_rt | word_acc | nonword_acc |
-|---|---:|---:|---:|---:|
-| 1 | 812 | 940 | 0.95 | 0.88 |
+| ppt_id | word_rt | nonword_rt |
+|---|---:|---:|
+| 1 | 812 | 940 |
 
 Tidy summary:
 
-| ppt_id | lexicality | mean_rt | accuracy |
-|---|---|---:|---:|
-| 1 | word | 812 | 0.95 |
-| 1 | nonword | 940 | 0.88 |
+| ppt_id | lexicality | mean_rt |
+|---|---|---:|
+| 1 | word | 812 |
+| 1 | nonword | 940 |
 
 Tidy data makes the next verb easier to write.
 
-## Backup: Pivoting
-
-Pivoting changes data shape.
+## Pivoting For Reshaping Data Frames
 
 ```{r}
 chinese_ldt_summary <- summarise(
   chinese_ldt,
   mean_rt = mean(rt),
-  accuracy = mean(correct),
   .by = c(ppt_id, lexicality)
 )
 ```
@@ -566,7 +570,7 @@ Create one row per participant, with separate columns for words and nonwords.
 chinese_ldt_summary_wide <- pivot_wider(
   chinese_ldt_summary,
   names_from = lexicality,
-  values_from = c(mean_rt, accuracy)
+  values_from = mean_rt
 )
 ```
 
@@ -579,12 +583,13 @@ chinese_ldt_summary_wide
 
 ```{r}
 pivot_longer(
-  chinese_ldt_summary,
-  cols = c(mean_rt, accuracy),
-  names_to = "measure",
-  values_to = "value"
+  chinese_ldt_summary_wide,
+  cols = c(word, nonword),
+  names_to = "lexicality",
+  values_to = "mean_rt"
 )
 ```
 
+## Pivoting exercise
 
-Pivoting exercise: `exercises/05_optional_pivoting_backup.R`.
+<p class="pivot-exercise-note"> <span class="inline-code">exercises/05_optional_pivoting_backup.R</span>.</p>

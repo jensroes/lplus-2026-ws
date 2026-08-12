@@ -1,3 +1,4 @@
+/* Title slide background and text overlay. */
 .title-slide {
   background-image: url("assets/ntu4.jpg");
   background-position: center;
@@ -32,6 +33,7 @@
   margin-top: 18px;
 }
 
+/* Bluesky handle with a small embedded icon. Used on the title and intro slides. */
 .bluesky-account {
   align-items: center;
   display: inline-flex;
@@ -54,6 +56,7 @@
   text-decoration: none;
 }
 
+/* General reusable slide helpers. */
 .topic-label {
   color: #0868ac;
   font-weight: bold;
@@ -92,10 +95,139 @@
   line-height: 1.45;
 }
 
+/* Intro slide: text column plus right-hand world map. */
+.intro-profile {
+  align-items: start;
+  display: grid;
+  gap: 28px;
+  /* Second value controls the map column width. Increase it for a larger map. */
+  grid-template-columns: minmax(0, 1fr) 520px;
+  margin-top: 8px;
+}
+
+.intro-profile ul {
+  margin-top: 0;
+}
+
+.intro-profile li {
+  font-size: 22px;
+  line-height: 1.28;
+  margin-bottom: 7px;
+}
+
+.intro-visuals {
+  display: grid;
+  gap: 12px;
+}
+
+.location-map-wrap {
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  /* Keep this in sync with the second grid-template-columns value above. */
+  width: 520px;
+}
+
+.intro-profile .location-map {
+  display: block;
+  height: auto;
+  /* Keep this in sync with .location-map-wrap width. */
+  width: 520px;
+}
+
+/* Main world-map arrow.
+   left/top place the arrowhead on the map because the arrowhead is ::before.
+   Increase left to move the arrowhead east/right; increase top to move it south/down.
+   width controls how far the arrow extends back toward the label.
+   transform rotate controls the arrow angle. */
+.map-arrow {
+  background: #1f2937;
+  height: 2px;
+  left: 48.5%;
+  position: absolute;
+  top: 15.3%;
+  transform: rotate(-10deg);
+  transform-origin: left center;
+  width: 136px;
+  z-index: 2;
+}
+
+/* Arrowhead for the main world-map callout. */
+.map-arrow::before {
+  border-bottom: 5px solid transparent;
+  border-right: 9px solid #1f2937;
+  border-top: 5px solid transparent;
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: -4px;
+}
+
+/* Text label at the tail end of the main arrow. */
+.map-label {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.1;
+  padding: 5px 7px;
+  position: absolute;
+  left: 75%;
+  top: 2.9%;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+/* Zoomed inset map. This reuses the same world map image, cropped with overflow hidden. */
+.uk-inset {
+  background: #eef6fb;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+  bottom: 10px;
+  box-shadow: 0 5px 18px rgba(15, 23, 42, 0.28);
+  height: 126px;
+  overflow: hidden;
+  position: absolute;
+  right: 10px;
+  width: 170px;
+  z-index: 3;
+}
+
+/* Crop position for the zoomed UK inset.
+   Move left closer to 0 to shift the map image right inside the crop.
+   Move top closer to 0 to shift the map image down inside the crop.
+   Increase width to zoom in further. */
+.uk-inset img {
+  left: -1386px;
+  position: absolute;
+  top: -210px;
+  width: 3100px;
+}
+
+/* Red Nottingham dot inside the zoomed inset.
+   Increase left to move the dot right; increase top to move it down. */
+.uk-dot {
+  background: #b42318;
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 0 0 5px rgba(180, 35, 24, 0.28);
+  height: 10px;
+  left: 47%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  z-index: 4;
+}
+
 .small {
   font-size: 75%;
 }
 
+/* Generic two-column layout used on some content slides. */
 .two-col {
   align-items: stretch;
   box-sizing: border-box;
@@ -108,6 +240,7 @@
   max-width: 88%;
 }
 
+/* Plain informational panels. Avoid using these where normal text is clearer. */
 .plain-panel {
   background: #f7fbff;
   border: 2px solid #0868ac;
@@ -131,6 +264,7 @@
   margin: 0;
 }
 
+/* Workshop overview pipeline on the overview slide. */
 .pipeline {
   align-items: stretch;
   display: flex;
@@ -175,6 +309,7 @@
   font-weight: bold;
 }
 
+/* Lexical decision task stimulus table. */
 .stimulus-table {
   border-collapse: collapse;
   font-size: 28px;
@@ -210,6 +345,7 @@
   margin-top: 6px;
 }
 
+/* Recommended reading slide: two reference columns. */
 .reading-columns {
   display: grid;
   gap: 28px;
@@ -227,6 +363,7 @@
   margin-bottom: 8px;
 }
 
+/* Base R versus tidyverse comparison table. */
 .comparison-table table {
   font-size: 20px;
   line-height: 1.2;
@@ -252,6 +389,7 @@
   width: 39%;
 }
 
+/* Final workflow/function overview table. */
 .function-overview table {
   font-size: 22px;
   line-height: 1.22 !important;
@@ -286,6 +424,12 @@
   width: 66%;
 }
 
+.pivot-exercise-note {
+  /* Negative margin lifts the final pivoting exercise note slightly. */
+  margin-top: -4px !important;
+}
+
+/* Default code-block style. This affects R code input chunks. */
 pre {
   background: #f7fbff !important;
   border: 1px solid #c7dceb !important;
@@ -320,6 +464,9 @@ pre code {
   width: calc(100% - 96px);
 }
 
+/* Printed R output, especially tibble output.
+   This is separate from code input chunks: grey accent, console-like font,
+   larger line-height, and preserved spacing for column alignment. */
 pre.r-output,
 pre.lang-r-output,
 slides > slide pre:not(.prettyprint) {
@@ -345,6 +492,7 @@ slides > slide pre:not(.prettyprint) {
   width: calc(100% - 96px);
 }
 
+/* Prevent syntax-highlighter colours from leaking into printed tibble output. */
 pre.r-output *,
 pre.lang-r-output *,
 slides > slide pre:not(.prettyprint) * {
@@ -353,6 +501,7 @@ slides > slide pre:not(.prettyprint) * {
   font-weight: inherit !important;
 }
 
+/* Special classes inserted by assets/code-highlight.js for output styling. */
 pre.r-output .r-missing-value,
 pre.lang-r-output .r-missing-value,
 slides > slide pre:not(.prettyprint) .r-missing-value {

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2754 1398" role="img" aria-labelledby="title desc">
+  <title id="title">World map showing Nottingham in the United Kingdom</title>
+  <desc id="desc">A blank world map with country and continent outlines and a marker for Nottingham in the United Kingdom.</desc>
+  <!-- Base map: Wikimedia Commons, BlankMap-World.svg, public domain. -->
+  <rect width="2754" height="1398" fill="#eef6fb"/>
+  <image href="world-map-base.svg" x="0" y="0" width="2754" height="1398"/>
+  <circle cx="1370" cy="365" r="26" fill="#b42318"/>
+  <circle cx="1370" cy="365" r="58" fill="none" stroke="#b42318" stroke-width="14" opacity="0.35"/>
+  <path d="M1404 335h540" stroke="#1f2937" stroke-width="11" stroke-linecap="round"/>
+  <path d="M1944 335l-36-25m36 25-36 25" fill="none" stroke="#1f2937" stroke-width="11" stroke-linecap="round"/>
+  <rect x="1964" y="238" width="560" height="180" rx="20" fill="#ffffff" stroke="#d1d5db" stroke-width="5"/>
+  <text x="2010" y="318" fill="#111827" font-family="Arial, sans-serif" font-size="74" font-weight="700">Nottingham</text>
+  <text x="2010" y="384" fill="#4b5563" font-family="Arial, sans-serif" font-size="54">United Kingdom</text>
+</svg>

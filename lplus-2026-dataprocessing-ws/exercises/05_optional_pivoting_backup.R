@@ -11,7 +11,6 @@ chinese_ldt <- read_csv("data/chinese_ldt.csv")
 chinese_ldt_summary <- summarise(
   chinese_ldt,
   mean_rt = mean(---),
-  accuracy = mean(---),
   n = n(),
   .by = c(---, ---)
 )
@@ -22,26 +21,26 @@ chinese_ldt_summary
 chinese_ldt_wide <- pivot_wider(
   chinese_ldt_summary,
   names_from = ---,
-  values_from = c(---, ---, ---)
+  values_from = ---
 )
 
 chinese_ldt_wide
 
 # 3. Use `pivot_longer` to make the participant summary longer again.
 chinese_ldt_long <- pivot_longer(
-  chinese_ldt_summary,
+  chinese_ldt_wide,
   cols = c(---, ---),
-  names_to = "measure",
-  values_to = "value"
+  names_to = "---",
+  values_to = "---"
 )
 
 chinese_ldt_long
 
-# 4. Use the long summary to calculate average participant-level values
-# for mean RT and accuracy by lexicality.
+# 4. Use the long summary to calculate average participant-level RT values
+# by lexicality.
 summarise(
   chinese_ldt_long,
-  average_value = mean(---),
+  average_rt = mean(---),
   n = n(),
-  .by = c(---, ---)
+  .by = ---
 )
