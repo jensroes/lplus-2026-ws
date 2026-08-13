@@ -148,7 +148,7 @@ For your own work later:
 - **File > New Project**
 - choose **New Directory** or **Existing Directory**
 - keep raw data in a `data/` folder
-- keep scripts in a `scripts/` or `exercises/` folder
+- keep scripts in a `scripts/` or `r/` folder (today we use `exercises/`)
 - open the `.Rproj` file before working
 
 Project paths should be relative:
@@ -185,22 +185,6 @@ The tidyverse is a collection of R packages for working with data.
 
 The packages share a common style: data first, instructions second.
 
-## Tidyverse And Base R
-
-<div class="comparison-table">
-
-| Goal | Base R | Tidyverse |
-|---|---|---|
-| read CSV data | `read.csv("file.csv")` | `read_csv("file.csv")` |
-| select variables | `data[, c("ppt_id", "rt")]` | `select(data, ppt_id, rt)` |
-| filter rows | `data[data$rt > 2000, ]` | `filter(data, rt > 2000)` |
-| create a variable | `data$rt_sec <- data$rt / 1000` | `mutate(data, rt_sec = rt / 1000)` |
-| summarise | `mean(data$rt)` | `summarise(data, mean_rt = mean(rt))` |
-
-</div>
-
-The tidyverse versions use consistent function names and avoid repeatedly typing the data frame name inside each instruction.
-
 ## One Shared Pattern
 
 <p class="question">Most tidyverse data processing functions follow one logic.</p>
@@ -218,9 +202,27 @@ mutate(data, new_variable = old_variable * 2)
 summarise(data, mean_variable = mean(variable))
 ```
 
+
+## Tidyverse And Base R
+
+<div class="comparison-table">
+
+| Goal | Base R | Tidyverse |
+|---|---|---|
+| read CSV data | `read.csv("file.csv")` | `read_csv("file.csv")` |
+| select variables | `data[, c("ppt_id", "rt")]` | `select(data, ppt_id, rt)` |
+| filter rows | `data[data$rt > 2000, ]` | `filter(data, rt > 2000)` |
+| create a variable | `data$rt_sec <- data$rt / 1000` | `mutate(data, rt_sec = rt / 1000)` |
+| summarise | `mean(data$rt)` | `summarise(data, mean_rt = mean(rt))` |
+
+</div>
+
+The tidyverse versions use consistent function names and avoid repeatedly typing the data frame name inside each instruction.
+
+
 ## Chinese Lexical Decision Task
 
-Participants saw stimulus images in Chinese or Latin script and decided whether each one was a real word.
+Participants saw stimulus images in Chinese or Latin script and decided whether each one was a real word. Example item for *cat*:
 
 <table class="stimulus-table ldt-stimuli">
   <tr>
@@ -230,17 +232,19 @@ Participants saw stimulus images in Chinese or Latin script and decided whether 
   </tr>
   <tr>
     <td>Chinese</td>
-    <td><img src="assets/ldt/chinese_realword_cat.png" alt="Chinese real word stimulus"><span class="stim-label">cat / word</span></td>
-    <td><img src="assets/ldt/chinese_nonword_cat.png" alt="Chinese nonword stimulus"><span class="stim-label">cat / nonword</span></td>
+    <td><img src="assets/ldt/chinese_realword_cat.png" alt="Chinese real word stimulus"></td>
+    <td><img src="assets/ldt/chinese_nonword_cat.png" alt="Chinese nonword stimulus"></td>
   </tr>
   <tr>
     <td>Latin</td>
-    <td><img src="assets/ldt/latin_realword_cat.png" alt="Latin real word stimulus"><span class="stim-label">cat / word</span></td>
-    <td><img src="assets/ldt/latin_nonword_cat.png" alt="Latin nonword stimulus"><span class="stim-label">cat / nonword</span></td>
+    <td><img src="assets/ldt/latin_realword_cat.png" alt="Latin real word stimulus"></td>
+    <td><img src="assets/ldt/latin_nonword_cat.png" alt="Latin nonword stimulus"></td>
   </tr>
 </table>
 
-<p class="source-note">Each row in the dataset is one response trial from the online task export.</p>
+<p class="source-note">Each row in the dataset is one response trial from the online task.</p>
+
+**Note:** The original export was far more messy than what we will work with.
 
 ## More Variables
 
@@ -274,6 +278,18 @@ chinese_ldt <- read_csv("data/chinese_ldt.csv")
 class(chinese_ldt)
 # "spec_tbl_df" "tbl_df" "tbl" "data.frame"
 ```
+
+## Why Use Tibbles?
+
+Tibbles are modern data frames designed for interactive work.
+
+They are useful because they:
+
+- print compactly instead of filling the console
+- show variable types such as `<chr>`, `<dbl>`, and `<lgl>`
+- preserve column names more predictably
+- avoid some automatic conversions from base R data frames
+- work smoothly with tidyverse verbs such as `select`, `filter`, `mutate`, and `summarise`
 
 ## Reading Excel Files
 
@@ -315,6 +331,16 @@ count(chinese_ldt, lexicality)
 ```
 
 Open `exercises/01_reading_inspecting.R`.
+
+## Three Core Data Processing Tools
+
+Many tidyverse functions are useful, but three verbs do much of the everyday work:
+
+- `select` chooses columns
+- `filter` chooses rows
+- `mutate` creates or changes columns
+
+Together, these three functions let you make a raw data frame smaller, cleaner, and more useful for analysis.
 
 ## Selecting Variables
 

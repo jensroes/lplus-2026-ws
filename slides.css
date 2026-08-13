@@ -375,28 +375,31 @@
 
 /* Base R versus tidyverse comparison table. */
 .comparison-table table {
-  font-size: 20px;
-  line-height: 1.2;
+  font-size: 19px;
+  line-height: 1.16;
   table-layout: fixed;
   width: 100%;
 }
 
 .comparison-table th,
 .comparison-table td {
-  padding: 6px 8px;
+  padding: 5px 6px;
   vertical-align: top;
 }
 
 .comparison-table th:nth-child(1),
 .comparison-table td:nth-child(1) {
-  width: 22%;
+  width: 14% !important;
 }
 
 .comparison-table th:nth-child(2),
-.comparison-table td:nth-child(2),
+.comparison-table td:nth-child(2) {
+  width: 40% !important;
+}
+
 .comparison-table th:nth-child(3),
 .comparison-table td:nth-child(3) {
-  width: 39%;
+  width: 46% !important;
 }
 
 /* Final workflow/function overview table. */
