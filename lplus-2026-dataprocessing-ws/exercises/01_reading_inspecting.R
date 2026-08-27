@@ -31,7 +31,7 @@ count(---, ---)
 # 7. Count the combinations of script and lexicality.
 count(---, ---, ---)
 
-# 8. Count the bilingual-status categories.
+# 8. Count the language-status categories.
 count(---, ---)
 
 # 9. Read the same data from Excel.

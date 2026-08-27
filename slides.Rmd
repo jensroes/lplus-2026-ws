@@ -84,7 +84,7 @@ Preprocessing matters because it:
   <div class="pipeline-box"><span class="panel-title">Summarise</span>Use <span class="inline-code">summarise</span> + <span class="inline-code">.by</span></div>
 </div>
 
-Throughout, I will first introduce functions which we then practice in exercises.
+Throughout, I will first introduce functions which we then practice in exercises. Everything will be made available.
 
 ## Download The Workshop Folder From GitHub
 
@@ -98,12 +98,11 @@ This creates:
 
 - `lplus-2026-dataprocessing-ws/`
 
-Then open:
+Then open the provided R project file for this workshop:
 
-- `lplus-2026-dataprocessing-ws/slides.html`
 - `lplus-2026-dataprocessing-ws/lplus-2026-dataprocessing-ws.Rproj`
 
-## RStudio Projects
+## RStudio Projects: `.Rproj`
 
 <p class="question">An RStudio Project is a folder-based workspace.</p>
 
@@ -116,8 +115,6 @@ Why it matters:
 
 - paths start from the project folder
 - scripts, data, slides, and exercises stay together
-
-For this workshop, open the provided R project file.
 
 ## Why Projects Matter
 
@@ -160,10 +157,10 @@ read_csv("data/my_data.csv")
 ## Installing And Loading Packages
 
 ```{r eval=FALSE}
-install.packages(c("tidyverse", "readxl", "haven"))
+install.packages("tidyverse")
 ```
 
-Install packages once.
+Install packages once. Installing `tidyverse` also installs `readxl` and `haven`.
 
 ```{r eval=FALSE}
 library(tidyverse)
@@ -171,7 +168,7 @@ library(readxl)
 library(haven)
 ```
 
-Load packages in every new R session where you want to use them.
+Load packages in every new R session where you want to use their functions.
 
 ## What Is The Tidyverse?
 
@@ -179,6 +176,7 @@ The tidyverse is a collection of R packages for working with data.
 
 - `readr` reads rectangular data files
 - `readxl` reads Excel files
+- `haven` reads SPSS, Stata, and SAS files
 - `dplyr` transforms and summarises data
 - `tidyr` changes data shape
 - `ggplot2` makes plots
@@ -205,11 +203,12 @@ summarise(data, mean_variable = mean(variable))
 
 ## Tidyverse And Base R
 
+The tidyverse versions use consistent function names and avoid repeatedly typing the data frame name inside each instruction.
+
 <div class="comparison-table">
 
 | Goal | Base R | Tidyverse |
 |---|---|---|
-| read CSV data | `read.csv("file.csv")` | `read_csv("file.csv")` |
 | select variables | `data[, c("ppt_id", "rt")]` | `select(data, ppt_id, rt)` |
 | filter rows | `data[data$rt > 2000, ]` | `filter(data, rt > 2000)` |
 | create a variable | `data$rt_sec <- data$rt / 1000` | `mutate(data, rt_sec = rt / 1000)` |
@@ -217,7 +216,7 @@ summarise(data, mean_variable = mean(variable))
 
 </div>
 
-The tidyverse versions use consistent function names and avoid repeatedly typing the data frame name inside each instruction.
+
 
 
 ## Chinese Lexical Decision Task
@@ -257,7 +256,7 @@ Task variables:
 
 Participant variables:
 
-- `age`, `bilingual_status`
+- `age`, `language_status`
 
 Outcome variables:
 
@@ -287,8 +286,8 @@ They are useful because they:
 
 - print compactly instead of filling the console
 - show variable types such as `<chr>`, `<dbl>`, and `<lgl>`
-- preserve column names more predictably
-- avoid some automatic conversions from base R data frames
+- make it easier to notice when column names changed during import
+- avoid surprise changes such as automatically turning text into factors
 - work smoothly with tidyverse verbs such as `select`, `filter`, `mutate`, and `summarise`
 
 ## Reading Excel Files
@@ -361,7 +360,7 @@ select(chinese_ldt, ppt_id, stimulus, contains("response"))
 Use `-` inside `select` to remove variables.
 
 ```{r}
-select(chinese_ldt, -word_eng, -rt_sec)
+select(chinese_ldt, -word_eng, -rt_sec, -stimulus, -language_status)
 ```
 
 ## Store The Result
@@ -410,27 +409,29 @@ filter(chinese_ldt, lexicality %in% c("word", "nonword"))
 
 ## Missing Values
 
-Some other example data:
+Some participants have no coded `language_status`.
 
-```{r echo = F}
-select(NHANES::NHANESraw, ID, Age, Education)
+```{r}
+missing_language_status <- filter(chinese_ldt, is.na(language_status)) 
+select(missing_language_status, ppt_id, age, language_status)
 ```
+
 Missing values are `NA`, not `"NA"`.
 
 ## Missing Values
 
-```{r}
-filter(chinese_ldt, is.na(rt)) # find missing rt values
+```{r eval=F}
+filter(chinese_ldt, is.na(language_status)) # find missing values
 ```
 
 ```{r eval=FALSE}
-filter(chinese_ldt, !is.na(rt)) # remove missing rt values
+filter(chinese_ldt, !is.na(language_status)) # remove missing values
 ```
 
 or
 
 ```{r eval = FALSE}
-drop_na(chinese_ldt, rt)
+drop_na(chinese_ldt, language_status)
 ```
 
 
