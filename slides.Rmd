@@ -411,9 +411,18 @@ filter(chinese_ldt, lexicality %in% c("word", "nonword"))
 
 Some participants have no coded `language_status`.
 
-```{r}
-missing_language_status <- filter(chinese_ldt, is.na(language_status)) 
-select(missing_language_status, ppt_id, age, language_status)
+```{r echo=FALSE}
+tibble(
+  ppt_id = c(1, 4, 43, 45, 50),
+  age = c(22, 24, 30, 29, 20),
+  language_status = c(
+    "balanced",
+    NA,
+    NA,
+    NA,
+    "balanced"
+  )
+)
 ```
 
 Missing values are `NA`, not `"NA"`.
@@ -559,20 +568,27 @@ Andrews, M. (2021). *Doing data science in R: An introduction for social scienti
 
 ## Tidy Data And Pivoting
 
-Messy summary:
+Wide summary:
 
-| ppt_id | word_rt | nonword_rt |
-|---|---:|---:|
-| 1 | 812 | 940 |
+```{r echo=FALSE}
+tibble(
+  ppt_id = 1,
+  word_rt = 812,
+  nonword_rt = 940
+)
+```
 
 Tidy summary:
 
-| ppt_id | lexicality | mean_rt |
-|---|---|---:|
-| 1 | word | 812 |
-| 1 | nonword | 940 |
+```{r echo=FALSE}
+tibble(
+  ppt_id = c(1, 1),
+  lexicality = c("word", "nonword"),
+  rt = c(812, 940)
+)
+```
 
-Tidy data makes the next verb easier to write.
+When conditions are stored in one column, we can use the same tidyverse verbs across conditions instead of writing separate code for each condition.
 
 ## Pivoting For Reshaping Data Frames
 

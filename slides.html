@@ -4252,19 +4252,14 @@ count(chinese_ldt, lexicality)</pre>
 
 <p>Some participants have no coded <code>language_status</code>.</p>
 
-<pre class = 'prettyprint lang-r'>missing_language_status &lt;- filter(chinese_ldt, is.na(language_status)) 
-select(missing_language_status, ppt_id, age, language_status)</pre>
-
-<pre class = 'prettyprint lang-r-output'># A tibble: 160 × 3
+<pre class = 'prettyprint lang-r-output'># A tibble: 5 × 3
   ppt_id   age language_status
    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          
-1      4    24 &lt;NA&gt;           
+1      1    22 balanced       
 2      4    24 &lt;NA&gt;           
-3      4    24 &lt;NA&gt;           
-4      4    24 &lt;NA&gt;           
-5      4    24 &lt;NA&gt;           
-6      4    24 &lt;NA&gt;           
-# ℹ 154 more rows</pre>
+3     43    30 &lt;NA&gt;           
+4     45    29 &lt;NA&gt;           
+5     50    20 balanced       </pre>
 
 <p>Missing values are <code>NA</code>, not <code>&quot;NA&quot;</code>.</p>
 
@@ -4432,42 +4427,22 @@ select(missing_language_status, ppt_id, age, language_status)</pre>
 
 </article></slide><slide class=""><hgroup><h2>Tidy Data And Pivoting</h2></hgroup><article  id="tidy-data-and-pivoting">
 
-<p>Messy summary:</p>
+<p>Wide summary:</p>
 
-<table class = 'rmdtable'>
-<tr class="header">
-<th align="left">ppt_id</th>
-<th align="right">word_rt</th>
-<th align="right">nonword_rt</th>
-</tr>
-<tr class="odd">
-<td align="left">1</td>
-<td align="right">812</td>
-<td align="right">940</td>
-</tr>
-</table>
+<pre class = 'prettyprint lang-r-output'># A tibble: 1 × 3
+  ppt_id word_rt nonword_rt
+   &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;
+1      1     812        940</pre>
 
 <p>Tidy summary:</p>
 
-<table class = 'rmdtable'>
-<tr class="header">
-<th align="left">ppt_id</th>
-<th align="left">lexicality</th>
-<th align="right">mean_rt</th>
-</tr>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">word</td>
-<td align="right">812</td>
-</tr>
-<tr class="even">
-<td align="left">1</td>
-<td align="left">nonword</td>
-<td align="right">940</td>
-</tr>
-</table>
+<pre class = 'prettyprint lang-r-output'># A tibble: 2 × 3
+  ppt_id lexicality    rt
+   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+1      1 word         812
+2      1 nonword      940</pre>
 
-<p>Tidy data makes the next verb easier to write.</p>
+<p>When conditions are stored in one column, we can use the same tidyverse verbs across conditions instead of writing separate code for each condition.</p>
 
 </article></slide><slide class=""><hgroup><h2>Pivoting For Reshaping Data Frames</h2></hgroup><article  id="pivoting-for-reshaping-data-frames">
 
