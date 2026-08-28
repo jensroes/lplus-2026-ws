@@ -3512,6 +3512,26 @@ padding-left: 20px;
 margin-bottom: 8px;
 }
 
+.comparison-grid {
+display: grid;
+font-size: 18px;
+grid-template-columns: minmax(150px, 0.8fr) minmax(300px, 1.9fr) minmax(360px, 2.3fr);
+line-height: 1.22;
+width: 100%;
+}
+.comparison-grid > div {
+border-bottom: 1px solid #d1d5db;
+padding: 8px 6px;
+white-space: nowrap;
+}
+.comparison-grid .comparison-header {
+color: #084081;
+font-weight: 700;
+}
+.comparison-grid code {
+font-size: 0.9em;
+white-space: nowrap;
+}
 .comparison-table table {
 font-size: 18px;
 line-height: 1.12;
@@ -3530,7 +3550,7 @@ white-space: nowrap;
 }
 .comparison-table th:nth-child(1),
 .comparison-table td:nth-child(1) {
-width: 17% !important;
+width: 9% !important;
 }
 .comparison-table th:nth-child(2),
 .comparison-table td:nth-child(2) {
@@ -3538,7 +3558,7 @@ width: 39% !important;
 }
 .comparison-table th:nth-child(3),
 .comparison-table td:nth-child(3) {
-width: 44% !important;
+width: 52% !important;
 }
 
 .function-overview table {
@@ -3732,7 +3752,96 @@ color: #222222;
           </hgroup>
   </slide>
 
-<script src="assets/code-highlight.js"></script>
+<script>
+ (function () {
+  function nextText(node) {
+    var current = node.nextSibling;
+
+    while (current) {
+      var text = current.textContent || "";
+      if (text.trim().length > 0) {
+        return text.trim();
+      }
+      current = current.nextSibling;
+    }
+
+    return "";
+  }
+
+  function markRFunctions() {
+    var tokens = document.querySelectorAll(
+      "pre.prettyprint:not(.lang-r-output) span.pln, pre.sourceCode span, pre code span"
+    );
+
+    tokens.forEach(function (token) {
+      var text = token.textContent || "";
+      var name = text.trim();
+
+      if (/^[A-Za-z.][A-Za-z0-9._]*$/.test(name) && nextText(token).charAt(0) === "(") {
+        token.classList.add("r-function-call");
+      }
+    });
+  }
+
+  function isOutputBlock(pre) {
+    if (pre.classList.contains("r-output") || pre.classList.contains("lang-r-output")) {
+      return true;
+    }
+
+    if (pre.classList.contains("prettyprint") || pre.querySelector("code")) {
+      return false;
+    }
+
+    var text = pre.textContent || "";
+    return text.indexOf("# A tibble:") !== -1 || text.indexOf("<NA>") !== -1;
+  }
+
+  function escapeHtml(text) {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function formatOutputLine(line) {
+    var html = escapeHtml(line)
+      .replace(/&lt;NA&gt;|<NA>/g, '<span class="r-missing-value">NA</span>')
+      .replace(/&lt;[A-Za-z0-9_?!]+&gt;/g, '<span class="r-variable-type">$&</span>')
+      .replace(/(^|[^A-Za-z0-9_.])-\d+(?:\.\d+)?/g, function (match, prefix) {
+        return prefix + '<span class="r-negative-number">' + match.slice(prefix.length) + '</span>';
+      });
+
+    if (/^#/.test(line)) {
+      return '<span class="r-output-meta">' + html + '</span>';
+    }
+
+    return html;
+  }
+
+  function formatConsoleOutput() {
+    var blocks = document.querySelectorAll("pre");
+
+    blocks.forEach(function (pre) {
+      if (!isOutputBlock(pre) || pre.dataset.consoleOutputFormatted === "true") {
+        return;
+      }
+
+      pre.innerHTML = (pre.textContent || "")
+        .split("\n")
+        .map(formatOutputLine)
+        .join("\n");
+      pre.dataset.consoleOutputFormatted = "true";
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    formatConsoleOutput();
+    markRFunctions();
+    window.setTimeout(formatConsoleOutput, 250);
+    window.setTimeout(markRFunctions, 250);
+  });
+}()); 
+</script>
 
 <slide class=""><hgroup><h2>Jens Roeser</h2></hgroup><article  id="jens-roeser">
 
@@ -3740,8 +3849,7 @@ color: #222222;
 <div>
 <ul>
 <li>Associate Professor in Psycholinguistics, Nottingham Institute of Psychology, Nottingham Trent University</li>
-<li>Research: language production, comprehension, and acquisition</li>
-<li>Focus: real-time written language production</li>
+<li>Focus: real-time planning in written language production</li>
 <li>Methods: Bayesian modelling, keystroke logging, eye tracking</li>
 <li>Teaching: (advanced) inferential statistics, data processing, data visualisation / dashboards</li>
 <li>Contact: <code>jens.roeser@ntu.ac.uk</code></li>
@@ -3907,7 +4015,7 @@ library(haven)</pre>
 <p>The tidyverse is a collection of R packages for working with data.</p>
 
 <ul>
-<li><code>readr</code> reads rectangular data files</li>
+<li><code>readr</code> reads table-like text files, such as CSV files</li>
 <li><code>readxl</code> reads Excel files</li>
 <li><code>haven</code> reads SPSS, Stata, and SAS files</li>
 <li><code>dplyr</code> transforms and summarises data</li>
@@ -3939,36 +4047,51 @@ summarise(data, mean_variable = mean(variable))</pre>
 <p>The tidyverse versions use consistent function names and avoid repeatedly typing the data frame name inside each instruction.</p>
 
 <div class="comparison-table">
-<table class = 'rmdtable'>
-<col width="33.333333%" />
-<col width="33.333333%" />
-<col width="33.333333%" />
-<tr class="header">
-<th align="left">Goal</th>
-<th align="left">Base R</th>
-<th align="left">Tidyverse</th>
-</tr>
-<tr class="odd">
-<td align="left">select variables</td>
-<td align="left"><code>data[, c(&quot;ppt_id&quot;, &quot;rt&quot;)]</code></td>
-<td align="left"><code>select(data, ppt_id, rt)</code></td>
-</tr>
-<tr class="even">
-<td align="left">filter rows</td>
-<td align="left"><code>data[data$rt &gt; 2000, ]</code></td>
-<td align="left"><code>filter(data, rt &gt; 2000)</code></td>
-</tr>
-<tr class="odd">
-<td align="left">create a variable</td>
-<td align="left"><code>data$rt_sec &lt;- data$rt / 1000</code></td>
-<td align="left"><code>mutate(data, rt_sec = rt / 1000)</code></td>
-</tr>
-<tr class="even">
-<td align="left">summarise</td>
-<td align="left"><code>mean(data$rt)</code></td>
-<td align="left"><code>summarise(data, mean_rt = mean(rt))</code></td>
-</tr>
-</table></div>
+<div class="comparison-grid">
+<div class="comparison-header">
+Goal</div>
+
+<div class="comparison-header">
+Base R</div>
+
+<div class="comparison-header">
+Tidyverse</div>
+
+<div>
+select variables</div>
+
+<div>
+<code>data[, c(&ldquo;ppt_id&rdquo;, &ldquo;rt&rdquo;)]</code></div>
+
+<div>
+<code>select(data, ppt_id, rt)</code></div>
+
+<div>
+filter rows</div>
+
+<div>
+<code>data[data$rt &gt; 2000, ]</code></div>
+
+<div>
+<code>filter(data, rt &gt; 2000)</code></div>
+
+<div>
+create a variable</div>
+
+<div>
+<code>data$rt_sec &lt;- data$rt / 1000</code></div>
+
+<div>
+<code>mutate(data, rt_sec = rt / 1000)</code></div>
+
+<div>
+summarise</div>
+
+<div>
+<code>mean(data$rt)</code></div>
+
+<div>
+<code>summarise(data, mean_rt = mean(rt))</code></div></div></div>
 
 </article></slide><slide class=""><hgroup><h2>Chinese Lexical Decision Task</h2></hgroup><article  id="chinese-lexical-decision-task">
 
@@ -4077,21 +4200,20 @@ Each row in the dataset is one response trial from the online task.
 
 </article></slide><slide class=""><hgroup><h2>Reading CSV Files</h2></hgroup><article  id="reading-csv-files">
 
+<pre class = 'prettyprint lang-r'>chinese_ldt &lt;- read_csv(&quot;data/chinese_ldt.csv&quot;)</pre>
+
+<p><code>read_csv</code> returns a tibble.</p>
+
+<pre class = 'prettyprint lang-r'>class(chinese_ldt)</pre>
+
+<pre class = 'prettyprint lang-r-output'>[1] &quot;spec_tbl_df&quot; &quot;tbl_df&quot;      &quot;tbl&quot;         &quot;data.frame&quot; </pre>
+
+<p>Base R returns a data frame.</p>
+
 <pre class = 'prettyprint lang-r'>chinese_ldt_base &lt;- read.csv(&quot;data/chinese_ldt.csv&quot;)
 class(chinese_ldt_base)</pre>
 
 <pre class = 'prettyprint lang-r-output'>[1] &quot;data.frame&quot;</pre>
-
-<pre class = 'prettyprint lang-r'># &quot;data.frame&quot;</pre>
-
-<p>Base R returns a data frame. <code>read_csv</code> returns a tibble.</p>
-
-<pre class = 'prettyprint lang-r'>chinese_ldt &lt;- read_csv(&quot;data/chinese_ldt.csv&quot;)
-class(chinese_ldt)</pre>
-
-<pre class = 'prettyprint lang-r-output'>[1] &quot;spec_tbl_df&quot; &quot;tbl_df&quot;      &quot;tbl&quot;         &quot;data.frame&quot; </pre>
-
-<pre class = 'prettyprint lang-r'># &quot;spec_tbl_df&quot; &quot;tbl_df&quot; &quot;tbl&quot; &quot;data.frame&quot;</pre>
 
 </article></slide><slide class=""><hgroup><h2>Why Use Tibbles?</h2></hgroup><article  id="why-use-tibbles">
 
@@ -4221,26 +4343,52 @@ count(chinese_ldt, lexicality)</pre>
 
 <p>Keep rows that match a condition.</p>
 
-<pre class = 'prettyprint lang-r'>filter(chinese_ldt, lexicality == &quot;word&quot;)</pre>
+<pre class = 'prettyprint lang-r'>filter(chinese_ldt, lexicality == &quot;word&quot;) # notice the double equals!</pre>
 
-<pre class = 'prettyprint lang-r-output'># A tibble: 1,820 × 13
-  ppt_id trial stimulus       script lexicality word_eng   age language_status
-   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;          
-1      1     1 latin_realwor… latin  word       scoop       22 balanced       
-2      1     3 chinese_realw… chine… word       shave       22 balanced       
-3      1     4 latin_realwor… latin  word       home        22 balanced       
-4      1     6 chinese_realw… chine… word       change      22 balanced       
-5      1     7 chinese_realw… chine… word       bag         22 balanced       
-6      1     9 chinese_realw… chine… word       peach       22 balanced       
-# ℹ 1,814 more rows
-# ℹ 5 more variables: correct_response &lt;chr&gt;, response &lt;chr&gt;, correct &lt;lgl&gt;,
-#   rt &lt;dbl&gt;, rt_sec &lt;dbl&gt;</pre>
+<pre class = 'prettyprint lang-r-output'># A tibble: 1,820 × 5
+  ppt_id trial script  lexicality    rt
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt;
+1      1     1 latin   word        1420
+2      1     3 chinese word         817
+3      1     4 latin   word        1571
+4      1     6 chinese word         903
+5      1     7 chinese word        1270
+6      1     9 chinese word         784
+# ℹ 1,814 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Filtering Rows</h2></hgroup><article  id="filtering-rows-1">
 
+<p>Keep rows that don’t match a condition.</p>
+
+<pre class = 'prettyprint lang-r'>filter(chinese_ldt, lexicality != &quot;word&quot;) # notice the exclamation point</pre>
+
+<pre class = 'prettyprint lang-r-output'># A tibble: 1,820 × 5
+  ppt_id trial script  lexicality    rt
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt;
+1      1     2 chinese nonword     2955
+2      1     5 chinese nonword     1036
+3      1     8 latin   nonword     2506
+4      1    11 chinese nonword      835
+5      1    14 latin   nonword      886
+6      1    15 latin   nonword     1788
+# ℹ 1,814 more rows</pre>
+
+</article></slide><slide class=""><hgroup><h2>Filtering Rows</h2></hgroup><article  id="filtering-rows-2">
+
 <p>Keep rows that match a condition.</p>
 
-<pre class = 'prettyprint lang-r'>filter(chinese_ldt, rt &gt; 2000)</pre>
+<pre class = 'prettyprint lang-r'>filter(chinese_ldt, rt &gt; 2000) # `&gt;` means &quot;larger than&quot;</pre>
+
+<pre class = 'prettyprint lang-r-output'># A tibble: 752 × 5
+  ppt_id trial script  lexicality    rt
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt;
+1      1     2 chinese nonword     2955
+2      1     8 latin   nonword     2506
+3      1    18 chinese nonword     2339
+4      1    21 latin   word        2721
+5      1    24 latin   nonword     4042
+6      1    40 chinese word        4008
+# ℹ 746 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>Filtering With Multiple Conditions</h2></hgroup><article  id="filtering-with-multiple-conditions">
 
@@ -4281,6 +4429,17 @@ count(chinese_ldt, lexicality)</pre>
   chinese_ldt,
   rt_sec = rt / 1000
 )</pre>
+
+<pre class = 'prettyprint lang-r-output'># A tibble: 3,640 × 6
+  ppt_id trial script  lexicality    rt rt_sec
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;
+1      1     1 latin   word        1420  1.42 
+2      1     2 chinese nonword     2955  2.96 
+3      1     3 chinese word         817  0.817
+4      1     4 latin   word        1571  1.57 
+5      1     5 chinese nonword     1036  1.04 
+6      1     6 chinese word         903  0.903
+# ℹ 3,634 more rows</pre>
 
 </article></slide><slide class=""><hgroup><h2>More Mutate Examples</h2></hgroup><article  id="more-mutate-examples">
 

@@ -27,7 +27,11 @@ library(readxl)
 library(haven)
 ```
 
-<script src="assets/code-highlight.js"></script>
+```{r embed-slide-helper, echo=FALSE, results='asis'}
+# Embed the helper so RPubs keeps the output formatting.
+slide_helper <- readLines("../assets/code-highlight.js", warn = FALSE)
+cat("<script>\n", paste(slide_helper, collapse = "\n"), "\n</script>\n")
+```
 
 ## Jens Roeser
 
@@ -35,8 +39,7 @@ library(haven)
 <div>
 
 - Associate Professor in Psycholinguistics, Nottingham Institute of Psychology, Nottingham Trent University
-- Research: language production, comprehension, and acquisition
-- Focus: real-time written language production
+- Focus: real-time planning in written language production
 - Methods: Bayesian modelling, keystroke logging, eye tracking
 - Teaching: (advanced) inferential statistics, data processing, data visualisation / dashboards
 - Contact: `jens.roeser@ntu.ac.uk`
@@ -174,7 +177,7 @@ Load packages in every new R session where you want to use their functions.
 
 The tidyverse is a collection of R packages for working with data.
 
-- `readr` reads rectangular data files
+- `readr` reads table-like text files, such as CSV files
 - `readxl` reads Excel files
 - `haven` reads SPSS, Stata, and SAS files
 - `dplyr` transforms and summarises data
@@ -207,12 +210,27 @@ The tidyverse versions use consistent function names and avoid repeatedly typing
 
 <div class="comparison-table">
 
-| Goal | Base R | Tidyverse |
-|---|---|---|
-| select variables | `data[, c("ppt_id", "rt")]` | `select(data, ppt_id, rt)` |
-| filter rows | `data[data$rt > 2000, ]` | `filter(data, rt > 2000)` |
-| create a variable | `data$rt_sec <- data$rt / 1000` | `mutate(data, rt_sec = rt / 1000)` |
-| summarise | `mean(data$rt)` | `summarise(data, mean_rt = mean(rt))` |
+<div class="comparison-grid">
+  <div class="comparison-header">Goal</div>
+  <div class="comparison-header">Base R</div>
+  <div class="comparison-header">Tidyverse</div>
+
+  <div>select variables</div>
+  <div><code>data[, c("ppt_id", "rt")]</code></div>
+  <div><code>select(data, ppt_id, rt)</code></div>
+
+  <div>filter rows</div>
+  <div><code>data[data&#36;rt &gt; 2000, ]</code></div>
+  <div><code>filter(data, rt &gt; 2000)</code></div>
+
+  <div>create a variable</div>
+  <div><code>data&#36;rt_sec &lt;- data&#36;rt / 1000</code></div>
+  <div><code>mutate(data, rt_sec = rt / 1000)</code></div>
+
+  <div>summarise</div>
+  <div><code>mean(data&#36;rt)</code></div>
+  <div><code>summarise(data, mean_rt = mean(rt))</code></div>
+</div>
 
 </div>
 
@@ -265,18 +283,22 @@ Outcome variables:
 ## Reading CSV Files
 
 ```{r}
-chinese_ldt_base <- read.csv("data/chinese_ldt.csv")
-class(chinese_ldt_base)
-# "data.frame"
+chinese_ldt <- read_csv("data/chinese_ldt.csv")
 ```
 
-Base R returns a data frame. `read_csv` returns a tibble.
+`read_csv` returns a tibble. 
 
 ```{r}
-chinese_ldt <- read_csv("data/chinese_ldt.csv")
 class(chinese_ldt)
-# "spec_tbl_df" "tbl_df" "tbl" "data.frame"
 ```
+
+Base R returns a data frame. 
+
+```{r}
+chinese_ldt_base <- read.csv("data/chinese_ldt.csv")
+class(chinese_ldt_base)
+```
+
 
 ## Why Use Tibbles?
 
@@ -384,16 +406,36 @@ This saves the result so the next line can use `chinese_ldt_small`.
 
 Keep rows that match a condition.
 
-```{r eval=T}
-filter(chinese_ldt, lexicality == "word")
+```{r eval=FALSE}
+filter(chinese_ldt, lexicality == "word") # notice the double equals!
 ```
+
+```{r echo = F}
+filter(chinese_ldt, lexicality == "word") %>% select(ppt_id, trial, script, lexicality, rt)
+```
+## Filtering Rows
+
+Keep rows that don't match a condition.
+
+```{r eval=FALSE}
+filter(chinese_ldt, lexicality != "word") # notice the exclamation point
+```
+
+```{r echo = F}
+filter(chinese_ldt, lexicality != "word") %>% select(ppt_id, trial, script, lexicality, rt)
+```
+
 
 ## Filtering Rows
 
 Keep rows that match a condition.
 
 ```{r eval=FALSE}
-filter(chinese_ldt, rt > 2000)
+filter(chinese_ldt, rt > 2000) # `>` means "larger than"
+```
+
+```{r echo = F}
+filter(chinese_ldt, rt > 2000) %>% select(ppt_id, trial, script, lexicality, rt)
 ```
 
 
@@ -455,6 +497,14 @@ mutate(
   rt_sec = rt / 1000
 )
 ```
+
+```{r echo = F}
+mutate(
+  chinese_ldt,
+  rt_sec = rt / 1000
+) %>% select(ppt_id, trial, script, lexicality, rt, rt_sec)
+```
+
 
 ## More Mutate Examples
 

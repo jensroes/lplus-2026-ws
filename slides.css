@@ -374,6 +374,30 @@
 }
 
 /* Base R versus tidyverse comparison table. */
+.comparison-grid {
+  display: grid;
+  font-size: 18px;
+  grid-template-columns: minmax(150px, 0.8fr) minmax(300px, 1.9fr) minmax(360px, 2.3fr);
+  line-height: 1.22;
+  width: 100%;
+}
+
+.comparison-grid > div {
+  border-bottom: 1px solid #d1d5db;
+  padding: 8px 6px;
+  white-space: nowrap;
+}
+
+.comparison-grid .comparison-header {
+  color: #084081;
+  font-weight: 700;
+}
+
+.comparison-grid code {
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
 .comparison-table table {
   font-size: 18px;
   line-height: 1.12;
@@ -395,7 +419,7 @@
 
 .comparison-table th:nth-child(1),
 .comparison-table td:nth-child(1) {
-  width: 17% !important;
+  width: 9% !important;
 }
 
 .comparison-table th:nth-child(2),
@@ -405,7 +429,7 @@
 
 .comparison-table th:nth-child(3),
 .comparison-table td:nth-child(3) {
-  width: 44% !important;
+  width: 52% !important;
 }
 
 /* Final workflow/function overview table. */
